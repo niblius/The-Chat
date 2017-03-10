@@ -1,0 +1,12 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "mongodb": "mongodb://localhost:27017/theChatBackend",
+  "public": "../public/",
+  "auth": {
+    "token": {
+      "secret": "kfe2M4fim587GPIRs2fzPQHmj+0IV74Jxqc8LRIjjX4gp7Ack5P0IYMFgKhWrQHquSZ3vvVbQjjX9rTMiUxzZg=="
+    },
+    "local": {}
+  }
+}
