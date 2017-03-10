@@ -1,14 +1,20 @@
 'use strict';
 
-const service = require('feathers-mongoose');
-const user = require('./user-model');
+const path = require('path');
+const NeDB = require('nedb');
+const service = require('feathers-nedb');
 const hooks = require('./hooks');
 
-module.exports = function() {
+module.exports = function(){
   const app = this;
 
-  const options = {
-    Model: user,
+  const db = new NeDB({
+    filename: path.join(app.get('nedb'), 'users.db'),
+    autoload: true
+  });
+
+  let options = {
+    Model: db,
     paginate: {
       default: 5,
       max: 25
