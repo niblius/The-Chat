@@ -1,15 +1,11 @@
 import { app } from '../store';
 
-export async function findChat(link) {
+export function findChat(link) {
   const chats = app.service('chats');
-  const result = await chats.find({
+  return chats.find({
     query: {
+      '$limit': 1,
       link
     }
-  });
-
-  if(!result) {
-    return null;
-  }
-  return result[0];
+  }).then((data, err) => data.data);
 }

@@ -1,23 +1,15 @@
 import { findChat } from '../services/api';
 
-export function chatWithLink(link) {
+export function searchChat(link) {
   return async (dispatch) => {
     dispatch({
       type: 'CHAT_SEARCH_REQUESTED',
       link
     });
-
-    try {
-      const chat = await findChat(link);
-      dispatch({
-        type: 'CHAT_SEARCH_SUCCEEDED',
-        chat
-      });
-    } catch(error) {
-      dispatch({
-        type: 'CHAT_SEARCH_ERROR',
-        error
-      });
-    }
-  }
+    const data = await findChat(link);
+    dispatch({
+      type: 'CHAT_SEARCH_DONE',
+      data
+    });
+  };
 }

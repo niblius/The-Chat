@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
-import foundChat from './foundChat';
+import searchedChat from './searchedChat';
 
-const rootReducer = combineReducers({ foundChat, routing: routerReducer });
+const rootReducer = combineReducers({ searchedChat, routing: routerReducer });
+
+export default rootReducer;
