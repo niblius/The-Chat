@@ -9,3 +9,18 @@ export function findChat(link) {
     }
   }).then((data, err) => data.data);
 }
+
+export function trySignup(email, password) {
+  const users = app.service('users');
+  return users.create({email, password}).then((data, err) => data);
+}
+
+export function tryLogin(email, password) {
+  return app.authenticate({
+      type: 'local',
+      email,
+      password
+    }).then((resp) => {
+      return resp;
+    });
+}

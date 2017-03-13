@@ -19,7 +19,7 @@ const socket = io(host);
 export const app = feathers()
   .configure(soceketio(socket))
   .configure(feathers.hooks())
-  .configure(feathers.authentication({ store: window.localstorage }));
+  .configure(feathers.authentication({ storage: window.localStorage }));
 
 export const history = syncHistoryWithStore(browserHistory, store);
 

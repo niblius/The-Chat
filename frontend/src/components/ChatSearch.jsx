@@ -1,17 +1,31 @@
 import React, { Component } from 'react';
 import { Input, Card } from 'semantic-ui-react';
 
-// TODO make it a logic component. right now we get data from the App, we should get data directly from the state.
 class ChatSearch extends Component {
+  constructor(props) {
+    super(props);
+    this.displayChat = this.displayChat.bind(this);
+    this.link = '';
+  }
+
+  displayChat() {
+    if (this.props.searchedChat.hasOwnProperty('title')) {
+      return (<Card>{this.props.searchedChat.title}</Card>); // big chat card
+    } else {
+      return (<div>NotFound</div>)
+    }
+  }
+
   render() {
     return (
       <div>
         <Input placeholder='Search...'
-          onChange={(event) => this.props.searchChat(event.target.value)} />
-        <div>
-          {this.props.searchedChat.hasOwnProperty('title') ?
-            this.props.searchedChat.title : 'Not found'} {/* big chat card */}
-        </div>
+          onChange={(event) => {
+            this.link = event.target.value;
+            if (this.link)
+              this.props.searchChat(this.link)
+          }} />
+        {this.link ? this.displayChat() : ''}
       </div>
     );
   }
