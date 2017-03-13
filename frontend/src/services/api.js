@@ -24,3 +24,7 @@ export function tryLogin(email, password) {
       return resp;
     });
 }
+
+export function tryLogout(app) {
+  return app.logout();
+}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { Header, Container } from 'semantic-ui-react';
+import NavBar from './NavBar.jsx'
 
 class Main extends Component {
   render() {
@@ -9,6 +10,7 @@ class Main extends Component {
         <Header as='h1' textAlign='center'>
           <Link to='/'>The Chat</Link>
         </Header>
+        <NavBar {...this.props}/>
         {React.cloneElement(this.props.children, this.props)}
       </Container>
     );

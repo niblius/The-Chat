@@ -1,4 +1,4 @@
-import { findChat, trySignup, tryLogin } from '../services/api';
+import { findChat, trySignup, tryLogin, tryLogout } from '../services/api';
 import { browserHistory } from 'react-router';
 
 export function searchChat(link) {
@@ -72,4 +72,18 @@ export function authGood(user) {
     type: 'AUTH_GOOD',
     user
   }
+}
+
+export function logout() {
+  return async (dispatch) => {
+    dispatch({
+      type: 'LOGOUT_REQUESTED'
+    });
+
+    await logout();
+
+    dispatch({
+      type: 'LOGOUT_DONE'
+    });
+  };
 }
