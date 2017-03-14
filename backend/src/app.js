@@ -13,6 +13,7 @@ const bodyParser = require('body-parser');
 const socketio = require('feathers-socketio');
 const middleware = require('./middleware');
 const services = require('./services');
+const database = require('./models');
 
 const app = feathers();
 
@@ -28,6 +29,7 @@ app.use(compress())
   .configure(hooks())
   .configure(rest())
   .configure(socketio())
+  .configure(database)
   .configure(services)
   .configure(middleware);
 

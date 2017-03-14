@@ -1,12 +1,19 @@
 {
   "host": "localhost",
   "port": 3030,
-  "nedb": "../data/",
   "public": "../public/",
   "auth": {
     "token": {
       "secret": "6dVsQa7lkt8Y9DyAImusNIy8VtZAxHzvYUN8kTL9rm0opKQKQP9xfEPCNY2cPcEAxiuQt+IlBowsFJs5h2mNYw=="
     },
     "local": {}
+  },
+  "db": {
+    "username": "nodejsapps",
+    "password": "12345678",
+    "database": "achatDB",
+    "host": "127.0.0.1",
+    "port": "5432",
+    "dialect": "postgres"
   }
 }
