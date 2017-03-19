@@ -87,3 +87,21 @@ export function logout() {
     });
   };
 }
+
+export function setLink(link) {
+  return {
+    type: 'SET_LINK',
+    link
+  }
+}
+
+export function setTitle(title) {
+  return {
+    type: 'SET_TITLE',
+    title
+  }
+}
+
+export function createNewChat(title, link) {
+
+}

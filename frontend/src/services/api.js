@@ -7,12 +7,19 @@ export function findChat(link) {
       '$limit': 1,
       link
     }
-  }).then((data, err) => data.data);
+  }).then((data, err) => data.data)
+    .catch(e => {console.log(e)});
+}
+
+export function tryCreateChat() {
+
 }
 
 export function trySignup(email, password) {
   const users = app.service('users');
-  return users.create({email, password}).then((data, err) => data);
+  return users.create({email, password})
+          .then((data, err) => data)
+          .catch(e => {console.log(e)});
 }
 
 export function tryLogin(email, password) {
@@ -20,9 +27,9 @@ export function tryLogin(email, password) {
       type: 'local',
       email,
       password
-    }).then((resp) => {
-      return resp;
-    });
+    })
+    .then(resp => resp )
+    .catch(e => {console.log(e)});
 }
 
 export function tryLogout(app) {

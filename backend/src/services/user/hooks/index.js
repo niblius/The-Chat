@@ -3,6 +3,9 @@
 const globalHooks = require('../../../hooks');
 const hooks = require('feathers-hooks');
 const auth = require('feathers-authentication').hooks;
+const passwordHooks = require('./validatePassword');
+const validatePassword = passwordHooks.validatePassword;
+const validatePasswordIfAny = passwordHooks.validatePasswordIfAny;
 
 exports.before = {
   all: [],
@@ -18,16 +21,19 @@ exports.before = {
     auth.restrictToOwner({ ownerField: '_id' })
   ],
   create: [
+    validatePassword(),
     auth.hashPassword()
   ],
   update: [
     auth.verifyToken(),
+    validatePassword(),
     auth.populateUser(),
     auth.restrictToAuthenticated(),
     auth.restrictToOwner({ ownerField: '_id' })
   ],
   patch: [
     auth.verifyToken(),
+    validatePasswordIfAny(),
     auth.populateUser(),
     auth.restrictToAuthenticated(),
     auth.restrictToOwner({ ownerField: '_id' })

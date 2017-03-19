@@ -15,7 +15,7 @@ export function requireAuthentication(Component) {
         }
 
         checkAuth() {
-            if (!this.props.user.hasOwnProperty('data')) {
+            if (!this.props.currentUser.hasOwnProperty('data')) {
                 const redirectAfterLogin = this.props.location.pathname;
               browserHistory.push(`/login?next=${redirectAfterLogin}`);
             }
@@ -24,7 +24,7 @@ export function requireAuthentication(Component) {
         render() {
             return (
                 <div>
-                    {this.props.user.hasOwnProperty('data') === true
+                    {this.props.currentUser.hasOwnProperty('data') === true
                         ? <Component {...this.props}/>
                         : null
                     }

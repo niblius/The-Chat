@@ -17,7 +17,7 @@ class NavBar extends Component {
         {this.props.currentUser.data.email}
        </Menu.Item>
 
-       <Menu.Item name='logout' onClick={this.props.logout}>
+       <Menu.Item name='logout' onClick={this.props.tryLogout}>
          logout
        </Menu.Item>
      </Menu.Menu>
@@ -39,14 +39,14 @@ class NavBar extends Component {
   }
 
   render() {
-    const currUser = this.props.currentUser.hasOwnProperty('data');
+    const isLoggedIn = this.props.currentUser.hasOwnProperty('data');
     return (
       <Menu>
         <Menu.Item name='addRecipe' onClick={() => browserHistory.push('/chats')}>
           My chats
         </Menu.Item>
 
-        {currUser ? this.loggedIn() : this.loggedOut()}
+        {isLoggedIn ? this.loggedIn() : this.loggedOut()}
       </Menu>
     )
   }
