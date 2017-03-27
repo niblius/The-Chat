@@ -5,7 +5,7 @@ const basename = path.basename(module.filename);
 
 module.exports = function() {
   const app = this;
-  const config = app.get('db');
+  const config = app.get('db-settings');
   let db = {};
 
   const sequelize = new Sequelize(config.database, config.username,

@@ -17,7 +17,7 @@ class NavBar extends Component {
         {this.props.currentUser.data.email}
        </Menu.Item>
 
-       <Menu.Item name='logout' onClick={this.props.tryLogout}>
+       <Menu.Item name='logout' onClick={this.props.logout}>
          logout
        </Menu.Item>
      </Menu.Menu>

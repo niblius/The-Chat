@@ -1,4 +1,10 @@
-import { findChat, trySignup, tryLogin, tryLogout } from '../services/api';
+import {
+  findChat,
+  trySignup,
+  tryLogin,
+  tryLogout,
+  tryCreateChat,
+  tryRetrieveChats } from '../services/api';
 import { browserHistory } from 'react-router';
 
 export function searchChat(link) {
@@ -31,6 +37,7 @@ export function signup(email, password) {
         data
       });
     } catch(err) {
+      console.log(err);
       dispatch({
         type: 'SIGNUP_FAILED',
         err
@@ -57,6 +64,7 @@ export function login(email, password, next) {
         user
       });
     } catch(err) {
+      console.log(err);
       dispatch({
         type: 'LOGIN_FAILED',
         err
@@ -80,11 +88,13 @@ export function logout() {
       type: 'LOGOUT_REQUESTED'
     });
 
-    await logout();
+    await tryLogout();
 
     dispatch({
       type: 'LOGOUT_DONE'
     });
+
+    await browserHistory.push('');
   };
 }
 
@@ -103,5 +113,49 @@ export function setTitle(title) {
 }
 
 export function createNewChat(title, link) {
+  return async (dispatch) => {
+    dispatch({
+      type: 'CREATE_CHAT_REQUESTED',
+      title,
+      link
+    });
+    try {
+      const data = await tryCreateChat(title, link);
+      console.log(data);
+      dispatch({
+        type: 'CREATE_CHAT_SUCCEEDED',
+        data
+      });
+    } catch(err) {
+      console.log(err);
+      dispatch({
+        type: 'CREATE_CHAT_FAILED',
+        err
+      });
+    }
 
+    await browserHistory.push('/chats');
+  };
+}
+
+export function retrieveChats() {
+  return async (dispatch) => {
+    dispatch({
+      type: 'CHATS_REQUESTED'
+    });
+    try {
+      const chats = await tryRetrieveChats();
+      console.log(chats);
+      dispatch({
+        type: 'CHATS_RETRIEVE_SUCCEEDED',
+        chats
+      });
+    } catch(err) {
+      console.log(err);
+      dispatch({
+        type: 'CHATS_RETRIEVE_FAILED',
+        err
+      });
+    }
+  };
 }

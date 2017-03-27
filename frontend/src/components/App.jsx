@@ -7,7 +7,8 @@ import Main from './Main.jsx';
 function mapStateToProps(state) {
   return {
     searchedChat: state.searchedChat,
-    currentUser: state.currentUser
+    currentUser: state.currentUser,
+    chats: state.chats
   }
 }
 

@@ -9,7 +9,7 @@
     },
     "local": {}
   },
-  "db": {
+  "db-settings": {
     "username": "nodejsapps",
     "password": "12345678",
     "database": "achatDB",

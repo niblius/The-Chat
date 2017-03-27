@@ -10,6 +10,7 @@ import Home from './components/Home.jsx';
 import SignupPage from './components/SignupPage.jsx';
 import LoginPage from './components/LoginPage.jsx';
 import NewChatPage from './components/NewChatPage.jsx';
+import ChatList from './components/ChatList.jsx';
 
 import { authGood } from './actions/actionCreators';
 import { requireAuthentication } from './components/Auth';
@@ -22,6 +23,7 @@ const router = (
         <Route path='/signup' component={SignupPage}></Route>
         <Route path='/login' component={LoginPage}></Route>
         <Route path='/chats/new' component={requireAuthentication(NewChatPage)}></Route>
+        <Route path='/chats' component={requireAuthentication(ChatList)}></Route>
       </Route>
     </Router>
   </Provider>

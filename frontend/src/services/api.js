@@ -7,19 +7,13 @@ export function findChat(link) {
       '$limit': 1,
       link
     }
-  }).then((data, err) => data.data)
-    .catch(e => {console.log(e)});
-}
-
-export function tryCreateChat() {
-
+  }).then((data, err) => data.data);
 }
 
 export function trySignup(email, password) {
   const users = app.service('users');
   return users.create({email, password})
-          .then((data, err) => data)
-          .catch(e => {console.log(e)});
+          .then((data, err) => data);
 }
 
 export function tryLogin(email, password) {
@@ -28,10 +22,25 @@ export function tryLogin(email, password) {
       email,
       password
     })
-    .then(resp => resp )
-    .catch(e => {console.log(e)});
+    .then(resp => resp );
 }
 
-export function tryLogout(app) {
+export function tryLogout() {
   return app.logout();
+}
+
+export function tryCreateChat(title, link) {
+  const chats = app.service('chats');
+  return chats.create({title, link})
+          .then((data, err) => data);
+}
+
+export function tryRetrieveChats(userId) {
+  const chatUsers = app.service('chat-users');
+  return chatUsers.find({
+    query: {
+      UserId: userId
+    }
+  })
+  .then((result, err) => result.map((chatuser) => chatuser.chat));
 }
