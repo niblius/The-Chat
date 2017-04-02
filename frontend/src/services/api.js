@@ -35,12 +35,22 @@ export function tryCreateChat(title, link) {
           .then((data, err) => data);
 }
 
-export function tryRetrieveChats(userId) {
+export function tryRetrieveChats(UserId) {
   const chatUsers = app.service('chat-users');
   return chatUsers.find({
     query: {
-      UserId: userId
+      UserId
     }
   })
-  .then((result, err) => result.map((chatuser) => chatuser.chat));
+  .then((result) => {
+    const chats = new Map();
+    result.data.forEach(({chat}) => chats.set(chat.link, chat));
+    return chats;
+  });
+}
+
+export function trySendMessage(body, UserId, ChatId) {
+  const messages = app.service('messages');
+  return messages.create({body, UserId, ChatId})
+    .then((data, err) => data);
 }

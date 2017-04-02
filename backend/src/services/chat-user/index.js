@@ -9,7 +9,11 @@ module.exports = function(){
   const db = app.get('db');
 
   let options = {
-    Model: db.ChatUser
+    Model: db.ChatUser,
+    paginate: {
+      default: 10,
+      max: 25
+    }
   };
 
   // Initialize our service with any options it requires

@@ -2,12 +2,12 @@ import React from 'react';
 import { Card } from 'semantic-ui-react'
 import { browserHistory } from 'react-router';
 
-const ChatCard = ({ id, title }, i) => (
+const ChatCard = ({ title, link }) => (
   <Card
     centered
     header={title}
-    key={i}
-    onClick={() => browserHistory.push(`/chats/${id}`)}
+    key={link}
+    onClick={() => browserHistory.push(`/chats/${link}`)}
   />
 );
 

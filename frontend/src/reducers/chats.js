@@ -1,4 +1,4 @@
-function chats(state = [], action) {
+function chats(state = new Map(), action) {
   switch (action.type) {
     case "CHATS_RETRIEVE_SUCCEEDED":
       return action.chats;

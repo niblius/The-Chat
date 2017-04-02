@@ -1,21 +1,29 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import { Card } from 'semantic-ui-react'
+
 import ChatCard from './ChatCard.jsx';
 
-class ChatList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.props.retrieveChats(this.props.currentUser.data.id);
+function formList(chats) {
+  const list = [];
+  for (const [, chat] of chats) {
+    list.push(ChatCard(chat));
   }
-
-  render() {
-    return (
-      <Card.Group itemsPerRow={1}>
-        {this.props.chats.map((chat, i) => ChatCard(chat, i))}
-      </Card.Group>
-    );
-  }
+  return list;
 }
+
+let ChatList = ({ chats }) => {
+  return (
+    <Card.Group itemsPerRow={1}>
+      { formList(chats) }
+    </Card.Group>
+  );
+}
+
+const mapStateToProps = (state) => {
+  return { chats: state.chats }
+};
+
+ChatList = connect(mapStateToProps, {})(ChatList);
 
 export default ChatList;
