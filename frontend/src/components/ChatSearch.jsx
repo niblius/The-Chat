@@ -6,11 +6,18 @@ class ChatSearch extends Component {
     super(props);
     this.displayChat = this.displayChat.bind(this);
     this.link = '';
+    this.join = this.join.bind(this);
+  }
+
+  join(e) {
+    // redirect when joined successfully
+    e.preventDefault();
+    this.props.joinChat(this.props.searchedChat.id, this.props.currentUser.data.id);
   }
 
   displayChat() {
     if (this.props.searchedChat.hasOwnProperty('title')) {
-      return (<Card>{this.props.searchedChat.title}</Card>); // big chat card
+      return (<Card onClick={this.join}>{this.props.searchedChat.title}</Card>); // big chat card
     } else {
       return (<div>NotFound</div>)
     }

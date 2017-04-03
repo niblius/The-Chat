@@ -4,8 +4,9 @@ import {
   tryLogin,
   tryLogout,
   tryCreateChat,
-  tryRetrieveChats,
-  trySendMessage } from '../services/api';
+  tryRetrieveChatList,
+  trySendMessage,
+  tryJoinChat } from '../services/api';
 import { browserHistory } from 'react-router';
 
 export function searchChat(link) {
@@ -139,13 +140,13 @@ export function createNewChat(title, link) {
   };
 }
 
-export function retrieveChats(userId) {
+export function retrieveChatList(userId) {
   return async (dispatch) => {
     dispatch({
       type: 'CHATS_REQUESTED'
     });
     try {
-      const chats = await tryRetrieveChats(userId);
+      const chats = await tryRetrieveChatList(userId);
       console.log(chats);
       dispatch({
         type: 'CHATS_RETRIEVE_SUCCEEDED',
@@ -180,6 +181,31 @@ export function sendMessage(text, userId, chatId) {
       console.log(err);
       dispatch({
         type: 'CREATE_MESSAGE_FAILED',
+        err
+      });
+    }
+  }
+}
+
+export function joinChat(chatId, userId) {
+  return async (dispatch) => {
+    dispatch({
+      type: 'JOIN_CHAT_REQUESTED',
+      chatId,
+      userId
+    });
+    try {
+      const data = await tryJoinChat(chatId, userId);
+      console.log(data);
+      dispatch({
+        type: 'JOIN_CHAT_SUCCEEDED',
+        data
+      });
+      browserHistory.push('/chats');
+    } catch(err) {
+      console.log(err);
+      dispatch({
+        type: 'JOIN_CHAT_FAILED',
         err
       });
     }

@@ -35,7 +35,7 @@ export function tryCreateChat(title, link) {
           .then((data, err) => data);
 }
 
-export function tryRetrieveChats(UserId) {
+export function tryRetrieveChatList(UserId) {
   const chatUsers = app.service('chat-users');
   return chatUsers.find({
     query: {
@@ -44,7 +44,18 @@ export function tryRetrieveChats(UserId) {
   })
   .then((result) => {
     const chats = new Map();
-    result.data.forEach(({chat}) => chats.set(chat.link, chat));
+    result.data.forEach(({chat}) => {
+      const chatFixed = {
+        id: chat.id,
+        link: chat.link,
+        title: chat.title,
+        users: chat.chatUsers.map((cu) => cu.user),
+        messages: chat.messages,
+        createdAt: chat.createdAt,
+        updatedAt: chat.updatedAt
+      };
+      chats.set(chatFixed.link, chatFixed)
+    });
     return chats;
   });
 }
@@ -53,4 +64,9 @@ export function trySendMessage(body, UserId, ChatId) {
   const messages = app.service('messages');
   return messages.create({body, UserId, ChatId})
     .then((data, err) => data);
+}
+
+export function tryJoinChat(ChatId, UserId) {
+  const chatUsers = app.service('chat-users');
+  return chatUsers.create({UserId, ChatId});
 }

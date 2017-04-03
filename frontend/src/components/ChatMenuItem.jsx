@@ -1,12 +1,12 @@
 import React from 'react';
-import { Card } from 'semantic-ui-react'
+import { Menu } from 'semantic-ui-react'
 import { browserHistory } from 'react-router';
 
-const ChatCard = ({ title, link }) => (
-  <Card
-    centered
-    header={title}
+const ChatCard = ({ title, link }, isActive) => (
+  <Menu.Item
+    name={title}
     key={link}
+    active={isActive}
     onClick={() => browserHistory.push(`/chats/${link}`)}
   />
 );

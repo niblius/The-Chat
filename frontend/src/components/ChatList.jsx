@@ -1,29 +1,24 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Card } from 'semantic-ui-react'
+import { Grid, Menu } from 'semantic-ui-react'
 
-import ChatCard from './ChatCard.jsx';
+import ChatMenuItem from './ChatMenuItem.jsx';
 
-function formList(chats) {
+function formList(chats, current) {
   const list = [];
-  for (const [, chat] of chats) {
-    list.push(ChatCard(chat));
+  for (const [key, chat] of chats) {
+    list.push(ChatMenuItem(chat, key === current));
   }
   return list;
 }
 
-let ChatList = ({ chats }) => {
+let ChatList = ({ chats, current }) => {
   return (
-    <Card.Group itemsPerRow={1}>
-      { formList(chats) }
-    </Card.Group>
+    <Grid.Column width={4}>
+      <Menu fluid vertical tabular>
+        { formList(chats, current) }
+      </Menu>
+    </Grid.Column>
   );
 }
-
-const mapStateToProps = (state) => {
-  return { chats: state.chats }
-};
-
-ChatList = connect(mapStateToProps, {})(ChatList);
 
 export default ChatList;

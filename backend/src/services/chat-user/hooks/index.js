@@ -14,31 +14,45 @@ const schemas = {
         parentField: 'ChatId',
         childField: 'id',
         nameAs: 'chat',
-        include: [{
-          service: 'messages',
-          nameAs: 'messages',
-          asArray: true,
-          parentField: 'id',
-          childField: 'ChatId'
-        }]
+        include: [
+          {
+            service: 'messages',
+            nameAs: 'messages',
+            parentField: 'id',
+            childField: 'ChatId',
+            asArray: true
+          },
+          {
+            service: 'chat-users',
+            nameAs: 'chatUsers',
+            parentField: 'id',
+            childField: 'ChatId',
+            asArray: true,
+            include: [{
+              service: 'users',
+              nameAs: 'user',
+              parentField: 'UserId',
+              childField: 'id'
+            }]
+          }
+        ]
       },
     ]
   },
   'userListScheme': {
-    include: [
-      {
-        service: 'users',
-        nameAs: 'user',
-        parentField: 'UserId',
-        childField: 'id'
-      }
-    ]
+    include: [{
+      service: 'users',
+      nameAs: 'user',
+      parentField: 'UserId',
+      childField: 'id'
+    }]
   }
 };
 
 exports.before = { // TODO all the query restrictions
                    // TODO cannot set role
                    // restrict for only our user or only to the chat that current user have joined
+                   // TODO ONLY UNIQUE
   all: [
     auth.verifyToken(),
     auth.populateUser(),
@@ -52,7 +66,14 @@ exports.before = { // TODO all the query restrictions
 
 exports.after = {
   all: [
-    hooks.populate(() => schemas[hook.params.schema])
+    hooks.populate(
+      {
+        schema: (hook) => {
+          const schemaName = hook.params.schema || 'chatListScheme';
+          return schemas[schemaName];
+        }
+      }
+    )
   ],
   find: [],
   get: [],
