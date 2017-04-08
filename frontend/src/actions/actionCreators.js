@@ -211,3 +211,13 @@ export function joinChat(chatId, userId) {
     }
   }
 }
+
+export function onMessageCreated(message) {
+  return async (dispatch) => {
+    console.log(message);
+    dispatch({
+      type: 'MESSAGE_RECEIVED',
+      message
+    });
+  };
+}

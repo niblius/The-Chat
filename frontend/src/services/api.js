@@ -70,3 +70,8 @@ export function tryJoinChat(ChatId, UserId) {
   const chatUsers = app.service('chat-users');
   return chatUsers.create({UserId, ChatId});
 }
+
+export function subscribeToChats(messageReceived) {
+  const messages = app.service('messages');
+  messages.on('created', messageReceived);
+}

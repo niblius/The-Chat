@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Button, Grid, Segment } from 'semantic-ui-react';
+import { subscribeToChats } from '../services/api';
 // import { browserHistory } from 'react-router';
 
 import ChatList from './ChatList.jsx';
@@ -12,8 +13,9 @@ class ChatPage extends Component {
     const userId = this.props.currentUser.data.id;
 
     this.props.retrieveChatList(userId);
+    subscribeToChats(this.props.onMessageCreated);
 
-    this.body = '';
+    this.state = { text: '' };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.showChatOrEmptyPage = this.showChatOrEmptyPage.bind(this);
   }
@@ -21,7 +23,8 @@ class ChatPage extends Component {
   handleSubmit(e) {
     e.preventDefault();
     const userId = this.props.currentUser.data.id;
-    this.props.sendMessage(this.body, userId, this.currentChat.id);
+    this.props.sendMessage(this.state.text, userId, this.currentChat.id);
+    this.setState({ text: '' });
   }
 
   render() {
@@ -29,26 +32,33 @@ class ChatPage extends Component {
     return (
       <Grid>
         <ChatList chats={this.props.chats} current={this.props.router.params.chatLink}/>
-        <Grid.Column stretched width={12}>{this.showChatOrEmptyPage()}</Grid.Column>
+        {this.showChatOrEmptyPage()}
       </Grid>
     );
   }
 
   showChatOrEmptyPage() {
     if (!this.currentChat) {
-      return (<Segment>Choose the chat</Segment>);
+      return (
+        <Grid.Column stretched width={12}>
+          <Segment>Choose the chat.</Segment>
+        </Grid.Column>
+      );
     }
+
     return (
-      <div>
+      <Grid.Column stretched width={12}>
         <MessageList
           messages={this.currentChat.messages}
           users={this.currentChat.users}
           chatName={this.currentChat.title} />
         <Form onSubmit={this.handleSubmit}>
-          <Form.TextArea onChange={(e) => this.body = e.target.value}/>
+          <Form.TextArea
+            onChange={(e) => this.setState({text: e.target.value})}
+            value={this.state.text}/>
           <Button content='Send' labelPosition='left' icon='send' primary />
         </Form>
-      </div>
+      </Grid.Column>
     );
   }
 }

@@ -1,22 +1,56 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Comment, Header, Segment } from 'semantic-ui-react';
+import Scroll from 'react-scroll';
 
 import Message from './Message.jsx';
 
-let MessageList = ({ messages, users, chatName }) => {
-  return (
-    <Segment>
-      <Comment.Group>
-        <Header as='h3' dividing>{chatName}</Header>
-        {
-          // TODO what if user not found in the list? should request for
-          messages.map(
-            (m) => Message(m, users.find((u) => u.id === m.UserId))
-          )
-        }
-      </Comment.Group>
-    </Segment>
-  );
+class MessageList extends Component {
+  constructor(props) {
+    super(props);
+    this.scroll = Scroll.animateScroll;
+  }
+
+  componentWillMount() {
+    Scroll.scrollSpy.update();
+  }
+
+  componentDidUpdate() {
+    this.scroll.scrollToBottom({
+      containerId: 'messages_list',
+      duration: 0,
+      delay: 0
+    });
+  }
+
+  componentDidMount() {
+    this.scroll.scrollToBottom({
+      containerId: 'messages_list',
+      duration: 0,
+      delay: 0
+    });
+  }
+
+  render() {
+    return (
+        <Comment.Group>
+          <Header as='h3' dividing>{this.props.chatName}</Header>
+          <Segment
+            style={{
+                height: '500px',
+                overflowY: 'auto',
+                whiteSpace: 'nowrap'
+              }}
+            id='messages_list'>
+            {
+              // TODO what if user not found in the list? should request for
+              this.props.messages.map(
+                (m) => Message(m, this.props.users.find((u) => u.id === m.UserId))
+              )
+            }
+          </Segment>
+        </Comment.Group>
+    );
+  }
 }
 
 export default MessageList;
