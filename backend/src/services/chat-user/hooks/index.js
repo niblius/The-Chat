@@ -44,10 +44,7 @@ const schema = {
   ]
 };
 
-exports.before = { // TODO all the query restrictions
-                   // TODO cannot set role
-                   // restrict for only our user or only to the chat that current user have joined
-                   // TODO ONLY UNIQUE
+exports.before = {
   all: [
     auth.verifyToken(),
     auth.populateUser(),
@@ -55,7 +52,7 @@ exports.before = { // TODO all the query restrictions
   ],
   find: [validFindQuery()],
   patch: [
-    globalHooks.restrictToChatAdmin(),
+    globalHooks.restrictQueryToChatAdmin(),
     onlyRole(),
     validPatchQuery()
   ],
@@ -63,9 +60,9 @@ exports.before = { // TODO all the query restrictions
     chatExistsAndFreeToJoin(),
     setUserIdIfExternal(),
     cannotSetRole(),
-    notJoinedAlready()
+    notJoinedAlready()  // TODO allow multiple, different roles
   ],
-  remove: [globalHooks.restrictToChatAdmin()]
+  remove: [globalHooks.restrictQueryToChatAdmin()]
 };
 
 exports.after = {
