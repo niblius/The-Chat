@@ -10,6 +10,7 @@ exports.before = {
     auth.populateUser(),
     auth.restrictToAuthenticated(),
     /*restrict to joined*/
+    /*if userId -> should also be chatId and joined to that chat*/
   ],
   find: [],
   create: [],

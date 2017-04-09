@@ -4,8 +4,9 @@ const hooks = require('feathers-hooks');
 const auth = require('feathers-authentication').hooks;
 
 const globalHooks = require('../../../hooks');
-const restrictToAdmin = require('./restrictToAdmin');
 const addAdmin = require('./addAdmin');
+const removeChatUsers = require('./removeChatUsers');
+const removeMessages = require('./removeMessages');
 
 
 exports.before = {
@@ -14,18 +15,18 @@ exports.before = {
     auth.populateUser(),
     auth.restrictToAuthenticated(),
   ],
-  find: [
-  ],
-  get: [
-  ],
+  find: [],
+  get: [],
   create: [],
   update: [
-    restrictToAdmin(),
+    globalHooks.restrictToChatAdmin(),
   ],
   patch: [
-    restrictToAdmin(),
+    globalHooks.restrictToChatAdmin(),
   ],
-  remove: []
+  remove: [
+    globalHooks.restrictToChatAdmin()
+  ]
 };
 
 exports.after = {
@@ -35,5 +36,8 @@ exports.after = {
   create: [addAdmin()],
   update: [],
   patch: [],
-  remove: []
+  remove: [
+    removeChatUsers(),
+    removeMessages()
+  ]
 };

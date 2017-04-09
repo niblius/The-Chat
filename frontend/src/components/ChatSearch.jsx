@@ -12,7 +12,7 @@ class ChatSearch extends Component {
   join(e) {
     // redirect when joined successfully
     e.preventDefault();
-    this.props.joinChat(this.props.searchedChat.id, this.props.currentUser.data.id);
+    this.props.joinChat(this.props.searchedChat.id);
   }
 
   displayChat() {

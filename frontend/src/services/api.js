@@ -66,9 +66,9 @@ export function trySendMessage(body, UserId, ChatId) {
     .then((data, err) => data);
 }
 
-export function tryJoinChat(ChatId, UserId) {
+export function tryJoinChat(ChatId) {
   const chatUsers = app.service('chat-users');
-  return chatUsers.create({UserId, ChatId});
+  return chatUsers.create({ChatId});
 }
 
 export function subscribeToChats(messageReceived) {

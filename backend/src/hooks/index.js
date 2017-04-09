@@ -1,13 +1,31 @@
 'use strict';
 
-// Add any common hooks you want to share across services in here.
-// 
-// Below is an example of how a hook is written and exported. Please
-// see http://docs.feathersjs.com/hooks/readme.html for more details
-// on hooks.
+const Forbidden = require('feathers-errors').Forbidden;
 
-exports.myHook = function(options) {
-  return function(hook) {
-    console.log('My custom global hook ran. Feathers is awesome!');
+exports.restrictToJoined = (hook, UserId, ChatId, role) => {
+  const query = {
+    query: {
+      ChatId,
+      UserId
+    }
   };
-};
+
+  if (role) {
+    query.role = role;
+  }
+  
+  const chatUsers = hook.app.service('chat-users');
+  return chatUsers.find(query).then((result) => {
+    if (!result.total) {
+      throw new Forbidden('You are not in this chat.');
+    }
+    return hook;
+  });
+}
+
+exports.restrictToChatAdmin = () => {
+  return (hook) => {
+    globalHooks.restrictToJoined(hook,
+      hook.params.user.id, hook.params.ChatId, 'admin');
+  };
+}

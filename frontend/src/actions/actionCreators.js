@@ -187,15 +187,14 @@ export function sendMessage(text, userId, chatId) {
   }
 }
 
-export function joinChat(chatId, userId) {
+export function joinChat(chatId) {
   return async (dispatch) => {
     dispatch({
       type: 'JOIN_CHAT_REQUESTED',
-      chatId,
-      userId
+      chatId
     });
     try {
-      const data = await tryJoinChat(chatId, userId);
+      const data = await tryJoinChat(chatId);
       console.log(data);
       dispatch({
         type: 'JOIN_CHAT_SUCCEEDED',

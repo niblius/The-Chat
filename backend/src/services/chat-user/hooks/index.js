@@ -3,50 +3,45 @@
 const globalHooks = require('../../../hooks');
 const hooks = require('feathers-hooks-common');
 const auth = require('feathers-authentication').hooks;
+const validFindQuery = require('./validFindQuery');
+const onlyRole = require('./onlyRole');
+const validPatchQuery = require('./validPatchQuery');
+const chatExistsAndFreeToJoin = require('./chatExistsAndFreeToJoin');
+const cannotSetRole = require('./cannotSetRole');
+const notJoinedAlready = require('./notJoinedAlready');
+const setUserIdIfExternal = require('./setUserIdIfExternal');
 
-// TODO use 2 ui scheme, list of chats for the user, list of users for the chat
-// for the first one done populate users, for the second one don't populate chat
-const schemas = {
-  'chatListScheme': {
-    include: [
-      {
-        service: 'chats',
-        parentField: 'ChatId',
-        childField: 'id',
-        nameAs: 'chat',
-        include: [
-          {
-            service: 'messages',
-            nameAs: 'messages',
-            parentField: 'id',
-            childField: 'ChatId',
-            asArray: true
-          },
-          {
-            service: 'chat-users',
-            nameAs: 'chatUsers',
-            parentField: 'id',
-            childField: 'ChatId',
-            asArray: true,
-            include: [{
-              service: 'users',
-              nameAs: 'user',
-              parentField: 'UserId',
-              childField: 'id'
-            }]
-          }
-        ]
-      },
-    ]
-  },
-  'userListScheme': {
-    include: [{
-      service: 'users',
-      nameAs: 'user',
-      parentField: 'UserId',
-      childField: 'id'
-    }]
-  }
+const schema = {
+  include: [
+    {
+      service: 'chats',
+      parentField: 'ChatId',
+      childField: 'id',
+      nameAs: 'chat',
+      include: [
+        {
+          service: 'messages',
+          nameAs: 'messages',
+          parentField: 'id',
+          childField: 'ChatId',
+          asArray: true
+        },
+        {
+          service: 'chat-users',
+          nameAs: 'chatUsers',
+          parentField: 'id',
+          childField: 'ChatId',
+          asArray: true,
+          include: [{
+            service: 'users',
+            nameAs: 'user',
+            parentField: 'UserId',
+            childField: 'id'
+          }]
+        }
+      ]
+    },
+  ]
 };
 
 exports.before = { // TODO all the query restrictions
@@ -56,27 +51,27 @@ exports.before = { // TODO all the query restrictions
   all: [
     auth.verifyToken(),
     auth.populateUser(),
-    auth.restrictToAuthenticated(),
-    hooks.client('schema')
+    auth.restrictToAuthenticated()
   ],
-  find: [],
-  create: [],
-  remove: [ /* restrictToAdmin()*/ ]
+  find: [validFindQuery()],
+  patch: [
+    globalHooks.restrictToChatAdmin(),
+    onlyRole(),
+    validPatchQuery()
+  ],
+  create: [
+    chatExistsAndFreeToJoin(),
+    setUserIdIfExternal(),
+    cannotSetRole(),
+    notJoinedAlready()
+  ],
+  remove: [globalHooks.restrictToChatAdmin()]
 };
 
 exports.after = {
-  all: [
-    hooks.populate(
-      {
-        schema: (hook) => {
-          const schemaName = hook.params.schema || 'chatListScheme';
-          return schemas[schemaName];
-        }
-      }
-    )
-  ],
-  find: [],
-  get: [],
-  create: [],
+  all: [],
+  find: [hooks.populate({ schema })],
+  patch: [],
+  create: [hooks.populate({ schema })],
   remove: []
 };

@@ -18,9 +18,8 @@ module.exports = function(){
 
   // Initialize our service with any options it requires
   const serv = service(options);
-  delete serv.patch;
-  delete serv.update;
   delete serv.get;
+  delete serv.update;
   app.use('/chat-users', service(options));
 
   // Get our initialize service to that we can bind hooks

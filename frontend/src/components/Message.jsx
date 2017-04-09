@@ -5,7 +5,7 @@ const Message = (message, user) => {
   const date = new Date(message.createdAt);
   const yesterday = new Date(Date.now() - 864e5);
   const formattedDate = (date.getTime() < yesterday.getTime()) ?
-    `${date.getYear()}/${date.getMonth()}/${date.getDay()}` :
+    `${date.getFullYear()}/${date.getMonth()}/${date.getDay()}` :
     `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
     return (
       <Comment key={message.id}>

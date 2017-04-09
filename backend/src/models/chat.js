@@ -1,6 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
   var Chat = sequelize.define('Chat', {
-    // TODO chat virtual field owner
     title: {
       type: DataTypes.STRING,
       validate: {
