@@ -10,10 +10,10 @@ const Forbidden = require('feathers-errors').Forbidden;
 // create - checks data
 // the idea is that chatId should never be changed,
 // therefore we check only create method data
-exports.restrictToJoined = (hook, role) => {
-  (hook) => {
+function restrictToJoined(role) {
+  return (hook) => {
     if (!hook.provider) {
-      return hook;
+      return Promise.resolve(hook);
     }
 
     const userId = hook.params.user.id;
@@ -42,7 +42,7 @@ exports.restrictToJoined = (hook, role) => {
   }
 }
 
-exports.restrictToJoinedThrows = (role) => {
+function restrictToJoinedThrows(role) {
   return (hook) => {
     return restrictToJoined(role)(hook).then((joined) => {
       if (!joined) {
@@ -80,8 +80,14 @@ function isJoined(hook, userId, chatId, role) {
   });
 }
 
-exports.restrictToChatAdmin = () => {
+function restrictToChatAdmin() {
   return (hook) => {
     return restrictToJoinedThrows('admin')(hook);
   };
 }
+
+module.exports = {
+  restrictToJoinedThrows,
+  restrictToJoined,
+  restrictToChatAdmin
+};
