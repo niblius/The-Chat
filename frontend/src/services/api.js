@@ -35,40 +35,32 @@ export function tryCreateChat(title, link) {
           .then((data, err) => data);
 }
 
-export function tryRetrieveChatList(UserId) {
+export function tryRetrieveChatList(userId) {
   const chatUsers = app.service('chat-users');
   return chatUsers.find({
     query: {
-      UserId
+      userId
     }
   })
   .then((result) => {
+    console.log(result); // TODO change sequelize naming to more convenient one
     const chats = new Map();
-    result.data.forEach(({chat}) => {
-      const chatFixed = {
-        id: chat.id,
-        link: chat.link,
-        title: chat.title,
-        users: chat.chatUsers.map((cu) => cu.user),
-        messages: chat.messages,
-        createdAt: chat.createdAt,
-        updatedAt: chat.updatedAt
-      };
-      chats.set(chatFixed.link, chatFixed)
+    result.data.forEach(({ chat }) => {
+      chats.set(chat.link, chat)
     });
     return chats;
   });
 }
 
-export function trySendMessage(body, UserId, ChatId) {
+export function trySendMessage(body, userId, chatId) {
   const messages = app.service('messages');
-  return messages.create({body, UserId, ChatId})
+  return messages.create({body, userId, chatId})
     .then((data, err) => data);
 }
 
-export function tryJoinChat(ChatId) {
+export function tryJoinChat(chatId) {
   const chatUsers = app.service('chat-users');
-  return chatUsers.create({ChatId});
+  return chatUsers.create({chatId});
 }
 
 export function subscribeToChats(messageReceived) {

@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-  const User = sequelize.define('User', {
+  const User = sequelize.define('user', {
     email: {
       type: DataTypes.STRING,
       validate: {
@@ -14,8 +14,9 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        User.belongsToMany(models.Chat, { through: 'ChatUser' });
+        User.belongsToMany(models.Chat, { through: 'chatUser' });
         User.hasMany(models.Message);
+        User.hasMany(models.ChatUser)
       }
     }
   });

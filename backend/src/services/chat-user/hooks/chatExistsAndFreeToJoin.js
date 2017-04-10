@@ -6,7 +6,7 @@ function chatExistsAndFreeToJoin() {
       return hook;
 
     const chats = hook.app.service('chats');
-    return chats.get(hook.data.ChatId).then((result) => {
+    return chats.get(hook.data.chatId).then((result) => {
       if(!result.link)
         throw new BadRequest('Cannot join to the private chat.');
 

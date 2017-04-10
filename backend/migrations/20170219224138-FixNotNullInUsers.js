@@ -3,7 +3,7 @@
 module.exports = {
   up: function (queryInterface, Sequelize) {
     queryInterface.changeColumn(
-      'Users',
+      'users',
       'email',
       {
         type: Sequelize.STRING,
@@ -12,7 +12,7 @@ module.exports = {
     );
 
     queryInterface.changeColumn(
-      'Users',
+      'users',
       'password',
       {
         type: Sequelize.STRING,

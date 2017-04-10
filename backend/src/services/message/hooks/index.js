@@ -3,21 +3,18 @@
 const globalHooks = require('../../../hooks');
 const hooks = require('feathers-hooks-common');
 const auth = require('feathers-authentication').hooks;
-const ShouldHaveChatId = require('./shouldHaveChatId');
-const queryShouldHaveChatId = ShouldHaveChatId.query;
-const dataShouldHaveChatId = ShouldHaveChatId.data;
+const shouldHaveChatId = require('./shouldHaveChatId');
 const restrictToOwnerOrAdmin = require('./restrictToOwnerOrAdmin');
-const restrictToJoined = require('./restrictToJoined');
 
 exports.before = {
   all: [
     auth.verifyToken(),
     auth.populateUser(),
     auth.restrictToAuthenticated(),
-    restrictToJoined()
+    globalHooks.restrictToJoined()
   ],
-  find: [queryShouldHaveChatId()],
-  create: [dataShouldHaveChatId()],
+  find: [shouldHaveChatId()], // maybe don't need this, already checked in restrictToJoined
+  create: [shouldHaveChatId()],
   remove: [restrictToOwnerOrAdmin()]
 };
 

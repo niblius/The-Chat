@@ -15,9 +15,6 @@
     "database": "achatDB",
     "host": "127.0.0.1",
     "port": "5432",
-    "dialect": "postgres",
-    "query": {
-      "raw": true
-    }
+    "dialect": "postgres"
   }
 }

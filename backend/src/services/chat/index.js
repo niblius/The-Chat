@@ -6,10 +6,9 @@ const db = require('../../models');
 
 module.exports = function(){
   const app = this;
-  const db = app.get('db');
 
   let options = {
-    Model: db.Chat,
+    Model: app.db.Chat,
     paginate: {
       default: 5,
       max: 25

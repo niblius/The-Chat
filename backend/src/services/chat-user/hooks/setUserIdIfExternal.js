@@ -3,7 +3,7 @@ function setUserIdIfExternal() {
     if (!hook.params.provider)
       return hook;
 
-    hook.data.UserId = hook.params.user.id;
+    hook.data.userId = hook.params.user.id;
     return hook;
   };
 }

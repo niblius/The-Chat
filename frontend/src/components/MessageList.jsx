@@ -44,7 +44,7 @@ class MessageList extends Component {
             {
               // TODO what if user not found in the list? should request for
               this.props.messages.map(
-                (m) => Message(m, this.props.users.find((u) => u.id === m.UserId))
+                (m) => Message(m, this.props.users.find((u) => u.id === m.userId))
               )
             }
           </Segment>

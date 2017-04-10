@@ -1,21 +1,16 @@
 const BadRequest = require('feathers-errors').BadRequest;
 
-exports.query = () => {
+module.exports = () => {
   return (hook) => {
-    if (hook.params.query.ChatId === null) {
-      throw new BadRequest('ChatId cannot be null or undefined');
+    if (hook.method.match('create')) {
+      if (hook.data.chatId === null) {
+        throw new BadRequest('chatId cannot be null or undefined');
+      }
+    } else {
+      if (hook.params.query.chatId === null) {
+        throw new BadRequest('chatId cannot be null or undefined');
+      }
     }
-
-    return hook;
-  };
-}
-
-exports.data = () => {
-  return (hook) => {
-    if (hook.data.ChatId === null) {
-      throw new BadRequest('ChatId cannot be null or undefined');
-    }
-
     return hook;
   };
 }

@@ -6,10 +6,9 @@ const hooks = require('./hooks');
 
 module.exports = function(){
   const app = this;
-  const db = app.get('db');
 
   let options = {
-    Model: db.User,
+    Model: app.db.User,
     paginate: {
       default: 5,
       max: 25

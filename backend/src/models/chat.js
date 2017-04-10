@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-  var Chat = sequelize.define('Chat', {
+  var Chat = sequelize.define('chat', {
     title: {
       type: DataTypes.STRING,
       validate: {
@@ -31,8 +31,9 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        Chat.belongsToMany(models.User, { through: 'ChatUser' });
+        Chat.belongsToMany(models.User, { through: 'chatUser' });
         Chat.hasMany(models.Message);
+        Chat.hasMany(models.ChatUser);
       }
     }
   });

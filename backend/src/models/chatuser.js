@@ -1,13 +1,13 @@
 module.exports = function(sequelize, DataTypes) {
-  var ChatUser = sequelize.define('ChatUser', {
-    UserId: {
+  var ChatUser = sequelize.define('chatUser', {
+    userId: {
       type: DataTypes.INTEGER,
       references: {
         model: 'User',
         key: 'id'
       }
     },
-    ChatId: {
+    chatId: {
       type: DataTypes.INTEGER,
       references: {
         model: 'Chat',

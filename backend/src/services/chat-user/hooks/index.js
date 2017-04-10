@@ -1,7 +1,6 @@
 'use strict';
 
 const globalHooks = require('../../../hooks');
-const hooks = require('feathers-hooks-common');
 const auth = require('feathers-authentication').hooks;
 const validFindQuery = require('./validFindQuery');
 const onlyRole = require('./onlyRole');
@@ -10,39 +9,7 @@ const chatExistsAndFreeToJoin = require('./chatExistsAndFreeToJoin');
 const cannotSetRole = require('./cannotSetRole');
 const notJoinedAlready = require('./notJoinedAlready');
 const setUserIdIfExternal = require('./setUserIdIfExternal');
-
-const schema = {
-  include: [
-    {
-      service: 'chats',
-      parentField: 'ChatId',
-      childField: 'id',
-      nameAs: 'chat',
-      include: [
-        {
-          service: 'messages',
-          nameAs: 'messages',
-          parentField: 'id',
-          childField: 'ChatId',
-          asArray: true
-        },
-        {
-          service: 'chat-users',
-          nameAs: 'chatUsers',
-          parentField: 'id',
-          childField: 'ChatId',
-          asArray: true,
-          include: [{
-            service: 'users',
-            nameAs: 'user',
-            parentField: 'UserId',
-            childField: 'id'
-          }]
-        }
-      ]
-    },
-  ]
-};
+const populateAssociations = require('./populateAssociations');
 
 exports.before = {
   all: [
@@ -50,9 +17,9 @@ exports.before = {
     auth.populateUser(),
     auth.restrictToAuthenticated()
   ],
-  find: [validFindQuery()],
+  find: [validFindQuery(), populateAssociations()],
   patch: [
-    globalHooks.restrictQueryToChatAdmin(),
+    globalHooks.restrictToChatAdmin(),
     onlyRole(),
     validPatchQuery()
   ],
@@ -60,15 +27,15 @@ exports.before = {
     chatExistsAndFreeToJoin(),
     setUserIdIfExternal(),
     cannotSetRole(),
-    notJoinedAlready()  // TODO allow multiple, different roles
+    notJoinedAlready(),  // TODO allow multiple, different roles
   ],
-  remove: [globalHooks.restrictQueryToChatAdmin()]
+  remove: [globalHooks.restrictToChatAdmin()]
 };
 
 exports.after = {
   all: [],
-  find: [hooks.populate({ schema })],
+  find: [],
   patch: [],
-  create: [hooks.populate({ schema })],
+  create: [populateAssociations()],
   remove: []
 };

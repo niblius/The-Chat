@@ -15,7 +15,7 @@ function chats(state = new Map(), action) {
     case "MESSAGE_RECEIVED":
       let chat = null;
       for (let c of state.values()) {
-        if (c.id === action.message.ChatId)
+        if (c.id === action.message.chatId)
           chat = c;
       }
       const messages = [...chat.messages, action.message];

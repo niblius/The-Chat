@@ -18,7 +18,9 @@ module.exports = function() {
     })
     .forEach(function(file) {
       const model = sequelize['import'](path.join(__dirname, file));
-      db[model.name] = model;
+      let name = model.name;
+      name = name.charAt(0).toUpperCase() + name.slice(1);
+      db[name] = model;
     });
 
   Object.keys(db).forEach(function(modelName) {
@@ -30,5 +32,5 @@ module.exports = function() {
   db.sequelize = sequelize;
   db.Sequelize = Sequelize;
 
-  app.set('db', db);
+  app.db = db;
 }

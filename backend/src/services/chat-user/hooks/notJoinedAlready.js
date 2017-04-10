@@ -4,8 +4,8 @@ function notJoinedAlready() {
   return (hook) => {
     const chatUsers = hook.app.service('chat-users');
     return chatUsers.find({query: {
-      UserId: hook.data.UserId,
-      ChatId: hook.data.ChatId
+      userId: hook.data.userId,
+      chatId: hook.data.chatId
     }}).then((result) => {
       if (result.total)
         throw new BadRequest('Such chat-user already exists.');
