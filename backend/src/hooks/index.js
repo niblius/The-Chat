@@ -12,7 +12,7 @@ const Forbidden = require('feathers-errors').Forbidden;
 // therefore we check only create method data
 function restrictToJoined(role) {
   return (hook) => {
-    if (!hook.provider) {
+    if (!hook.params.provider) {
       return Promise.resolve(hook);
     }
 
@@ -25,7 +25,7 @@ function restrictToJoined(role) {
     } else if (hook.method.match('create')) {
       chatId = hook.data.chatId
     } else if (hook.method.match('patch|update|remove')) {
-      if (hook.id !== null || hook.id !== undefined) { // check id
+      if (hook.id !== null && hook.id !== undefined) { // check id
         objId = hook.id;
       } else {  // check query
         chatId = hook.params.query.chatId;
@@ -61,19 +61,20 @@ function restrictToJoinedThrows(role) {
 
 function isJoined(hook, userId, chatId, role) {
   const query = {
-    query: {
+    where: {
       chatId,
       userId
-    }
+    },
+    raw: true
   };
 
   if (role) {
-    query.role = role;
+    query.where.role = role;
   }
 
-  const chatUsers = hook.app.service('chat-users');
-  return chatUsers.find(query).then((result) => {
-    if (result.total === 0)
+  const ChatUser = hook.app.db.ChatUser;
+  return ChatUser.find(query).then((result) => {
+    if (!result)
       return null;
     else
       return hook;

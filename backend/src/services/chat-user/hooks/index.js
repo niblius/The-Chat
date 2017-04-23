@@ -10,6 +10,7 @@ const cannotSetRole = require('./cannotSetRole');
 const notJoinedAlready = require('./notJoinedAlready');
 const setUserIdIfExternal = require('./setUserIdIfExternal');
 const populateAssociations = require('./populateAssociations');
+const shouldHaveUserId = require('./shouldHaveUserId');
 
 exports.before = {
   all: [
@@ -29,7 +30,10 @@ exports.before = {
     cannotSetRole(),
     notJoinedAlready(),  // TODO allow multiple, different roles
   ],
-  remove: [globalHooks.restrictToChatAdmin()]
+  remove: [
+    globalHooks.restrictToChatAdmin(),
+    shouldHaveUserId()
+  ]
 };
 
 exports.after = {

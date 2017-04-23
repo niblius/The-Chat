@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Form, Button, Grid, Segment } from 'semantic-ui-react';
 import { subscribeToChats } from '../services/api';
-// import { browserHistory } from 'react-router';
 
 import ChatList from './ChatList.jsx';
 import MessageList from './MessageList.jsx';
+import UserList from './UserList';
 
 class ChatPage extends Component {
   constructor(props) {
@@ -17,7 +17,6 @@ class ChatPage extends Component {
 
     this.state = { text: '' };
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.showChatOrEmptyPage = this.showChatOrEmptyPage.bind(this);
   }
 
   handleSubmit(e) {
@@ -29,38 +28,45 @@ class ChatPage extends Component {
 
   render() {
     this.currentChat = this.props.chats.get(this.props.router.params.chatLink);
-    return (
-      <Grid>
-        <ChatList chats={this.props.chats} current={this.props.router.params.chatLink}/>
-        {this.showChatOrEmptyPage()}
-      </Grid>
-    );
-  }
-
-  showChatOrEmptyPage() {
+    const admin = (!this.currentChat)
+      ? null
+      : this.currentChat.users.find((u) => u.chatUser.role === 'admin');
     if (!this.currentChat) {
       return (
-        <Grid.Column stretched width={12}>
-          <Segment>Choose the chat.</Segment>
-        </Grid.Column>
+        <Grid>
+          <ChatList chats={this.props.chats}
+            current={this.props.router.params.chatLink}/>
+          <Grid.Column stretched width={12}>
+            <Segment>Choose the chat.</Segment>
+          </Grid.Column>
+        </Grid>
+      );
+    } else {
+      return (
+        <Grid>
+          <ChatList chats={this.props.chats}
+            current={this.props.router.params.chatLink}/>
+          <Grid.Column stretched width={8}>
+            <MessageList
+              messages={this.currentChat.messages}
+              users={this.currentChat.users}
+              chatName={this.currentChat.title} />
+            <Form onSubmit={this.handleSubmit}>
+              <Form.TextArea
+                onChange={(e) => this.setState({text: e.target.value})}
+                value={this.state.text}/>
+              <Button content='Send' labelPosition='left' icon='send' primary />
+            </Form>
+          </Grid.Column>
+          <UserList
+            users={this.currentChat.users}
+            isAdmin={admin.id === this.props.currentUser.data.id}
+            removeUser={(userId) => this.props.removeUser(userId, this.currentChat.id)}/>
+        </Grid>
       );
     }
-
-    return (
-      <Grid.Column stretched width={12}>
-        <MessageList
-          messages={this.currentChat.messages}
-          users={this.currentChat.users}
-          chatName={this.currentChat.title} />
-        <Form onSubmit={this.handleSubmit}>
-          <Form.TextArea
-            onChange={(e) => this.setState({text: e.target.value})}
-            value={this.state.text}/>
-          <Button content='Send' labelPosition='left' icon='send' primary />
-        </Form>
-      </Grid.Column>
-    );
   }
+
 }
 
 export default ChatPage;

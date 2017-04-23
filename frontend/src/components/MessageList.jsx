@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Comment, Header, Segment } from 'semantic-ui-react';
+import { Comment, Segment, Header } from 'semantic-ui-react';
 import Scroll from 'react-scroll';
 
 import Message from './Message.jsx';

@@ -5,6 +5,7 @@ const hooks = require('feathers-hooks-common');
 const auth = require('feathers-authentication').hooks;
 const shouldHaveChatId = require('./shouldHaveChatId');
 const restrictToOwnerOrAdmin = require('./restrictToOwnerOrAdmin');
+const addUsersField = require('./addUsersField');
 
 exports.before = {
   all: [
@@ -22,6 +23,8 @@ exports.after = {
   all: [],
   find: [],
   get: [],
-  create: [],
+  create: [
+    addUsersField() // use this to make event filter working
+  ],
   remove: []
 };

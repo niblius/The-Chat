@@ -67,3 +67,9 @@ export function subscribeToChats(messageReceived) {
   const messages = app.service('messages');
   messages.on('created', messageReceived);
 }
+
+export function tryRemoveChatUser(userId, chatId) {
+  const chatUsers = app.service('chat-users');
+  return chatUsers.remove(null, { query: {userId, chatId} })
+    .then((res) => res[0]);
+}

@@ -6,7 +6,8 @@ import {
   tryCreateChat,
   tryRetrieveChatList,
   trySendMessage,
-  tryJoinChat } from '../services/api';
+  tryJoinChat,
+  tryRemoveChatUser } from '../services/api';
 import { browserHistory } from 'react-router';
 
 export function searchChat(link) {
@@ -205,6 +206,31 @@ export function joinChat(chatId) {
       console.log(err);
       dispatch({
         type: 'JOIN_CHAT_FAILED',
+        err
+      });
+    }
+  }
+}
+
+export function removeUser(userId, chatId) {
+  return async (dispatch) => {
+    dispatch({
+      type: 'REMOVE_CHAT_USER_REQUESTED',
+      userId,
+      chatId
+    });
+    try {
+      const data = await tryRemoveChatUser(userId, chatId);
+      console.log('removed user: ');
+      console.log(data);
+      dispatch({
+        type: 'REMOVE_CHAT_USER_SUCCEEDED',
+        data
+      });
+    } catch(err) {
+      console.log(err);
+      dispatch({
+        type: 'REMOVE_CHAT_USER_FAILED',
         err
       });
     }

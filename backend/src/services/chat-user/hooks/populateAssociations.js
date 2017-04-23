@@ -10,7 +10,7 @@ module.exports = () => {
             model: db.Chat,
             include: [
               { model: db.Message },
-              { model: db.User }
+              { model: db.User, attributes: { exclude: ['password'] } }
             ]
           }
         ]

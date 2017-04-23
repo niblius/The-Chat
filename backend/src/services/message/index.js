@@ -22,4 +22,15 @@ module.exports = function(){
   messageService.before(hooks.before);
 
   messageService.after(hooks.after);
+
+  messageService.filter({
+    created: (data, connection, hook) => {
+      // TODO VERY inefficient, should be fixed in next version of feathers
+      if(!hook.params.users.find((u) => u.id === connection.user.id)) {
+        return false;
+      }
+
+      return data;
+    }
+  });
 };

@@ -1,25 +1,32 @@
 function chats(state = new Map(), action) {
-  let newState;
+  let newState, chat, newChat;
   switch (action.type) {
-    case "CHATS_RETRIEVE_SUCCEEDED":
+    case 'CHATS_RETRIEVE_SUCCEEDED':
       newState = new Map([...state, ...action.chats]);
       return newState;
 
-    /*
-    // if no chat found
-    case "CHATS_RETRIEVE_SUCCEEDED":
-     const newState = new Map([...state, [action.chat.link, action.chat]]);
-     return newState;
-    */
-
-    case "MESSAGE_RECEIVED":
-      let chat = null;
+    case 'MESSAGE_RECEIVED':
+      chat = null;
       for (let c of state.values()) {
         if (c.id === action.message.chatId)
           chat = c;
       }
       const messages = [...chat.messages, action.message];
-      const newChat = {...chat, messages};
+      newChat = {...chat, messages};
+      newState = new Map([
+        ...state,
+        [newChat.link, newChat]
+      ]);
+      return newState;
+
+    case 'REMOVE_CHAT_USER_SUCCEEDED':
+      chat = null;
+      for (let c of state.values()) {
+        if (c.id === action.data.chatId)
+          chat = c;
+      }
+      const users = chat.users.filter((u) => u.id !== action.data.userId);
+      newChat = {...chat, users};
       newState = new Map([
         ...state,
         [newChat.link, newChat]
