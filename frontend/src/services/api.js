@@ -55,7 +55,7 @@ export function tryRetrieveChatList(userId) {
 export function trySendMessage(body, userId, chatId) {
   const messages = app.service('messages');
   return messages.create({body, userId, chatId})
-    .then((data, err) => data);
+    .then((data) => data);
 }
 
 export function tryJoinChat(chatId) {
@@ -72,4 +72,19 @@ export function tryRemoveChatUser(userId, chatId) {
   const chatUsers = app.service('chat-users');
   return chatUsers.remove(null, { query: {userId, chatId} })
     .then((res) => res[0]);
+}
+
+export function trySendAudioMessage(blob, chatId) {
+  const audioMessages = app.service('audio-messages');
+  const promise = Promise.resolve();
+  return promise.then(() => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    }).then((result) => {
+      return audioMessages
+        .create({uri: result});
+    });
+  });
 }

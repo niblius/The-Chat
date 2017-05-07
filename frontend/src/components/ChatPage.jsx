@@ -5,6 +5,7 @@ import { subscribeToChats } from '../services/api';
 import ChatList from './ChatList.jsx';
 import MessageList from './MessageList.jsx';
 import UserList from './UserList';
+import MessageRecorder from './MessageRecorder.jsx';
 
 class ChatPage extends Component {
   constructor(props) {
@@ -51,12 +52,18 @@ class ChatPage extends Component {
               messages={this.currentChat.messages}
               users={this.currentChat.users}
               chatName={this.currentChat.title} />
+
             <Form onSubmit={this.handleSubmit}>
               <Form.TextArea
                 onChange={(e) => this.setState({text: e.target.value})}
                 value={this.state.text}/>
               <Button content='Send' labelPosition='left' icon='send' primary />
             </Form>
+
+            <MessageRecorder
+              sendMessage={(blob) =>
+                this.props.sendAudioMessage(blob, this.currentChat.id)}/>
+
           </Grid.Column>
           <UserList
             users={this.currentChat.users}

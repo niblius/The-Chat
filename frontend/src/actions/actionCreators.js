@@ -7,7 +7,8 @@ import {
   tryRetrieveChatList,
   trySendMessage,
   tryJoinChat,
-  tryRemoveChatUser } from '../services/api';
+  tryRemoveChatUser,
+  trySendAudioMessage} from '../services/api';
 import { browserHistory } from 'react-router';
 
 export function searchChat(link) {
@@ -163,7 +164,7 @@ export function retrieveChatList(userId) {
   };
 }
 
-export function sendMessage(text, userId, chatId) {
+export function sendMessage(text, userId, chatId) { // TODO no need userId, authentification has already cared about it.
   return async (dispatch) => {
     dispatch({
       type: 'CREATE_MESSAGE_REQUESTED',
@@ -245,4 +246,28 @@ export function onMessageCreated(message) {
       message
     });
   };
+}
+
+export function sendAudioMessage(blob, chatId) {
+  return async (dispatch) => {
+    dispatch({
+      type: 'CREATE_AUDIO_MESSAGE_REQUESTED',
+      blob,
+      chatId
+    });
+    try {
+      const data = await trySendAudioMessage(blob, chatId);
+      console.log(data);
+      dispatch({
+        type: 'CREATE_AUDIO_MESSAGE_SUCCEEDED',
+        data
+      });
+    } catch(err) {
+      console.log(err);
+      dispatch({
+        type: 'CREATE_AUDIO_MESSAGE_FAILED',
+        err
+      });
+    }
+  }
 }
