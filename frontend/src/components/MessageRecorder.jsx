@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
 import { Container, Button } from 'semantic-ui-react';
-import Recorder from 'recorder-js';
-import WaveStream from 'react-wave-stream';
+// import Wavesurfer from 'wavesurfer';
+import Wavesurfer from 'react-wavesurfer';
 
 class MessageRecorder extends Component {
   constructor(props) {
     super(props);
     this.startRecording = this.startRecording.bind(this);
     this.stopRecording = this.stopRecording.bind(this);
-    this.download = this.download.bind(this);
     this.send = this.send.bind(this);
+    this.togglePlay = this.togglePlay.bind(this);
+    this.changePosition = this.changePosition.bind(this);
 
-    this.audioContext =  new (window.AudioContext || window.webkitAudioContext)();
-    this.recorder = new Recorder(this.audioContext, {
-      onAnalysed: data => this.setState({analyserData: data}),
-    });
     this.sendMessage = props.sendMessage;
 
     this.state = {
@@ -22,38 +19,58 @@ class MessageRecorder extends Component {
       isRecording: false,
       stream: null,
       analyserData: {data: [], lineTo: 0},
+      playing: false,
+      pos: 0
     };
+    console.log(window);
   }
 
   componentDidMount() {
-    navigator.mediaDevices.getUserMedia({audio: true})
-      .then(stream => {
-        this.setState({stream});
-        this.recorder.init(stream);
-      })
-      .catch(err => console.log('Uh oh... unable to get stream...', err));
+    if (!window.Recorder.isRecordingSupported()) {
+      console.log('Recording is not supported in this browser.');
+      return;
+    }
+
+    this.recorder = new window.Recorder({
+      bitRate: 128*1024,
+      encoderSampleRate: 48000,
+      encoderPath: "/js/encoderWorker.min.js"
+    });
+
+    this.recorder.addEventListener( "dataAvailable", (e) => {
+      const blob = new Blob( [e.detail], { type: 'audio/ogg' } );
+      this.setState({
+        isRecording: false,
+        blob,
+      });
+    });
+
+    this.recorder.initStream();
   }
 
   startRecording() {
-    this.recorder.start()
-      .then(() => this.setState({isRecording: true}));
+    this.recorder.start();
+    this.setState({isRecording: true});
   }
 
   stopRecording() {
-    this.recorder.stop()
-      .then(({blob}) => this.setState({
-        isRecording: false,
-        blob,
-      }));
-  }
-
-  download() {
-    Recorder.download(this.state.blob, 'audio-message');
-    this.setState({blob: null});
+    this.recorder.stop();
   }
 
   send() {
     this.sendMessage(this.state.blob);
+  }
+
+  togglePlay() {
+    this.setState({
+      playing: !this.state.playing
+    });
+  }
+
+  changePosition(e) {
+    this.setState({
+      pos: e.originalArgs[0]
+    });
   }
 
   render() {
@@ -66,17 +83,21 @@ class MessageRecorder extends Component {
             <div>
               <Button icon='stop circle' onClick={this.stopRecording} primary/>
               <div style={{height: '150px', width: '150px', position: 'relative'}}>
-                <WaveStream {...this.state.analyserData}
-                  backgroundColor='#fff'
-                  stroke='#000'/>
+
               </div>
             </div>
           )
           : (
             <div>
               <Button onClick={this.startRecording} icon='unmute' primary/>
-              {(!blob) ? '' : (<Button onClick={this.download} icon='download' primary/>)}
-              <Button onClick={this.send} content='Send' labelPosition='left' icon='send' primary/>
+              {(!blob) ? '' : (<Button onClick={this.send} content='Send' labelPosition='left' icon='send' primary/>)}
+              {(!blob) ? '' : (<Button onClick={this.togglePlay} content='Play' labelPosition='left' icon='play' primary/>)}
+              <Wavesurfer
+                audioFile={blob}
+                pos={this.state.pos}
+                onPosChange={this.handlePosChange}
+                playing={this.state.playing}
+                ref="wavesurfer"/>
             </div>
           )}
       </Container>
