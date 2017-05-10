@@ -2,6 +2,7 @@ const globalHooks = require('../../../hooks');
 const auth = require('feathers-authentication').hooks;
 const createMessage = require('./createMessage');
 const shouldHaveChatId = require('../../message/hooks/shouldHaveChatId');
+const cannotSetKey = require('./cannotSetKey');
 
 exports.before = {
   all: [
