@@ -4,6 +4,7 @@ function createMessage() {
     messages.create({
       userId: hook.params.user.id,
       chatId: hook.data.chatId,
+      body: hook.data.body,
       blobId: hook.result.id
     });
   };

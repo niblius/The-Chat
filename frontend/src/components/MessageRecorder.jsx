@@ -1,18 +1,16 @@
 import React, { Component } from 'react';
-import { Container, Button } from 'semantic-ui-react';
-import Wavesurfer from 'react-wavesurfer';
+import { Container, Button, Form } from 'semantic-ui-react';
+import { AudioPreview } from './AudioPlayer';
 
 // TODO use prview component, use redux for stop/start recording
 class MessageRecorder extends Component {
   constructor(props) {
     super(props);
+    this.chatId = props.chatId;
     this.startRecording = this.startRecording.bind(this);
     this.stopRecording = this.stopRecording.bind(this);
     this.send = this.send.bind(this);
-    this.togglePlay = this.togglePlay.bind(this);
-    this.changePosition = this.changePosition.bind(this);
-
-    this.sendMessage = props.sendMessage;
+    this.toggleTextField = this.toggleTextField.bind(this);
 
     this.state = {
       blob: null,
@@ -20,7 +18,9 @@ class MessageRecorder extends Component {
       stream: null,
       analyserData: {data: [], lineTo: 0},
       playing: false,
-      pos: 0
+      pos: 0,
+      showTextField: false,
+      text: ''
     };
   }
 
@@ -62,7 +62,11 @@ class MessageRecorder extends Component {
   }
 
   send() {
-    this.sendMessage(this.state.blob);
+    if (this.state.blob)
+      this.props.sendAudioMessage(this.state.blob, this.state.text, this.chatId);
+    else
+      this.props.sendTextOnlyMessage(this.state.text, this.chatId);
+    this.setState({text: '', blob: null, showTextField: false});
   }
 
   togglePlay() {
@@ -77,6 +81,10 @@ class MessageRecorder extends Component {
     });
   }
 
+  toggleTextField() {
+    this.setState({showTextField: !this.state.showTextField});
+  }
+
   render() {
     const { isRecording, blob } = this.state;
 
@@ -86,31 +94,25 @@ class MessageRecorder extends Component {
           ? (<Button icon='stop circle' onClick={this.stopRecording} primary/>)
           : (<div>
                 <Button onClick={this.startRecording} icon='unmute' primary/>
-                {(!blob) ? ''
-                  : (<div>
-                      <Button
-                        onClick={this.send}
-                        content='Send'
-                        labelPosition='left'
-                        icon='send'
-                        primary/>
-                      <Button
-                        onClick={this.togglePlay}
-                        content='Play'
-                        labelPosition='left'
-                        icon='play'
-                        primary/>
-                      <Wavesurfer
-                        audioFile={blob}
-                        pos={this.state.pos}
-                        onPosChange={this.changePosition}
-                        playing={this.state.playing}
-                        options={{
-                          hideScrollbar: true,
-                          height: 50
-                        }}/>
-                    </div>)}
-              </div>)}
+                {(blob)
+                  ? (<AudioPreview blob={blob} chatId={this.chatId}/>)
+                  : null}
+                <Button
+                  onClick={this.send}
+                  content='Send'
+                  labelPosition='left'
+                  icon='send'
+                  primary/>
+                <Button
+                  onClick={this.toggleTextField}
+                  icon={(this.state.showTextField) ? 'minus' : 'plus'}
+                  primary/>
+                {(this.state.showTextField)
+                  ? (<Form.TextArea
+                      onChange={(e) => this.setState({text: e.target.value})}
+                      value={this.state.text}/>)
+                  : null}
+            </div>)}
       </Container>);
   }
 }

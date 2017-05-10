@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Grid, Segment } from 'semantic-ui-react';
+import { Grid, Segment } from 'semantic-ui-react';
 import { subscribeToChats } from '../services/api';
 
 import ChatList from './ChatList.jsx';
@@ -15,16 +15,6 @@ class ChatPage extends Component {
 
     this.props.retrieveChatList(userId);
     subscribeToChats(this.props.onMessageCreated);
-
-    this.state = { text: '' };
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    const userId = this.props.currentUser.data.id;
-    this.props.sendMessage(this.state.text, userId, this.currentChat.id);
-    this.setState({ text: '' });
   }
 
   render() {
@@ -46,24 +36,17 @@ class ChatPage extends Component {
       return (
         <Grid>
           <ChatList chats={this.props.chats}
-            current={this.props.router.params.chatLink}/>
+            current={this.props.router.params.chatLink}
+            playingId={this.props.audioPlayer.chatId}/>
           <Grid.Column stretched width={8}>
             <MessageList
               messages={this.currentChat.messages}
               users={this.currentChat.users}
               chatName={this.currentChat.title} />
-
-            <Form onSubmit={this.handleSubmit}>
-              <Form.TextArea
-                onChange={(e) => this.setState({text: e.target.value})}
-                value={this.state.text}/>
-              <Button content='Send' labelPosition='left' icon='send' primary />
-            </Form>
-
             <MessageRecorder
-              sendMessage={(blob) =>
-                this.props.sendAudioMessage(blob, this.currentChat.id)}/>
-
+              chatId={this.currentChat.id}
+              sendAudioMessage={this.props.sendAudioMessage}
+              sendTextOnlyMessage={this.props.sendTextMessage}/>
           </Grid.Column>
           <UserList
             users={this.currentChat.users}

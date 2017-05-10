@@ -52,9 +52,9 @@ export function tryRetrieveChatList(userId) {
   });
 }
 
-export function trySendMessage(body, userId, chatId) {
+export function trySendTextMessage(body, chatId) {
   const messages = app.service('messages');
-  return messages.create({body, userId, chatId})
+  return messages.create({body, chatId})
     .then((data) => data);
 }
 
@@ -74,7 +74,7 @@ export function tryRemoveChatUser(userId, chatId) {
     .then((res) => res[0]);
 }
 
-export function trySendAudioMessage(blob, chatId) {
+export function trySendAudioMessage(blob, text, chatId) {
   const audioMessages = app.service('audio-messages');
   const promise = Promise.resolve();
   return promise.then(() => {
@@ -84,7 +84,7 @@ export function trySendAudioMessage(blob, chatId) {
       reader.readAsDataURL(blob);
     }).then((result) => {
       return audioMessages
-        .create({uri: result, chatId}, {chatId});
+        .create({uri: result, chatId, body: text});
     });
   });
 }

@@ -101,7 +101,7 @@ class APreview extends Component {
     this.chatId = props.chatId;
     this.togglePlay = this.togglePlay.bind(this);
     this.onFinish = this.onFinish.bind(this);
-    this.handlePosChange = this.handlePosChange.bind(this);
+    this.changePosition = this.changePosition.bind(this);
     this.state = { pos: 0 };
   }
 

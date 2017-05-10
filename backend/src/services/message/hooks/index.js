@@ -5,6 +5,8 @@ const shouldHaveChatId = require('./shouldHaveChatId');
 const restrictToOwnerOrAdmin = require('./restrictToOwnerOrAdmin');
 const addUsersField = require('./addUsersField');
 const setUserId = require('./setUserId');
+const blobAndBodyCannotBeNull = require('./blobAndBodyCannotBeNull');
+const onlyServerCallsSetBlobId = require('./onlyServerCallsSetBlobId');
 
 exports.before = {
   all: [
@@ -14,7 +16,12 @@ exports.before = {
     globalHooks.restrictToJoined()
   ],
   find: [shouldHaveChatId()], // maybe don't need this, already checked in restrictToJoined
-  create: [shouldHaveChatId(), setUserId()],
+  create: [
+    shouldHaveChatId(),
+    setUserId(),
+    onlyServerCallsSetBlobId(),
+    blobAndBodyCannotBeNull()
+  ],
   remove: [restrictToOwnerOrAdmin()]
 };
 

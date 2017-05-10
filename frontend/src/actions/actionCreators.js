@@ -5,7 +5,7 @@ import {
   tryLogout,
   tryCreateChat,
   tryRetrieveChatList,
-  trySendMessage,
+  trySendTextMessage,
   tryJoinChat,
   tryRemoveChatUser,
   trySendAudioMessage,
@@ -165,16 +165,16 @@ export function retrieveChatList(userId) {
   };
 }
 
-export function sendMessage(text, userId, chatId) { // TODO no need userId, authentification has already cared about it.
+export function sendTextMessage(text, chatId) {
+  // TODO no need userId, authentification has already cared about it.
   return async (dispatch) => {
     dispatch({
       type: 'CREATE_MESSAGE_REQUESTED',
       text,
-      userId,
       chatId
     });
     try {
-      const data = await trySendMessage(text, userId, chatId);
+      const data = await trySendTextMessage(text, chatId);
       console.log(data);
       dispatch({
         type: 'CREATE_MESSAGE_SUCCEEDED',
@@ -249,7 +249,7 @@ export function onMessageCreated(message) {
   };
 }
 
-export function sendAudioMessage(blob, chatId) {
+export function sendAudioMessage(blob, text, chatId) {
   return async (dispatch) => {
     dispatch({
       type: 'CREATE_AUDIO_MESSAGE_REQUESTED',
@@ -257,7 +257,7 @@ export function sendAudioMessage(blob, chatId) {
       chatId
     });
     try {
-      const data = await trySendAudioMessage(blob, chatId);
+      const data = await trySendAudioMessage(blob, text, chatId);
       console.log(data);
       dispatch({
         type: 'CREATE_AUDIO_MESSAGE_SUCCEEDED',

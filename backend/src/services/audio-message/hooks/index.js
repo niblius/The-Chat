@@ -1,6 +1,7 @@
 const globalHooks = require('../../../hooks');
 const auth = require('feathers-authentication').hooks;
 const createMessage = require('./createMessage');
+const shouldHaveChatId = require('../../message/hooks/shouldHaveChatId');
 
 exports.before = {
   all: [
@@ -12,7 +13,7 @@ exports.before = {
   find: [], // TODO should be message with {chatId}.
             // We already know that the user is really in that chat.
   get: [],
-  create: [],
+  create: [shouldHaveChatId()],
   update: [],
   patch: [],
   remove: []

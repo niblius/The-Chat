@@ -1,7 +1,7 @@
 function setUserId() {
   return (hook) => {
     if (hook.params.provider)
-      hook.params.userId = hook.params.user.id;
+      hook.data.userId = hook.params.user.id;
   };
 }
 

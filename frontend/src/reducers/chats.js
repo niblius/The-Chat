@@ -13,42 +13,52 @@ function getNewStateWithChat(newChat, oldState) {
   ]);
 }
 
+function removeChatUserSucc(action, state) {
+  const chat = findChatById(action.data.chatId, state.values());
+  const users = chat.users.filter((u) => u.id !== action.data.userId);
+  const newChat = {...chat, users};
+  return getNewStateWithChat(newChat, state);
+}
+
+function messageReceived(action, state) {
+  const chat = findChatById(action.message.chatId, state.values())
+  const messages = [...chat.messages, action.message];
+  const newChat = {...chat, messages};
+  return getNewStateWithChat(newChat, state);
+}
+
+function audioBlobLoaded(action, state) {
+  const chat = findChatById(action.chatId, state.values());
+  let i = 0;
+  for(; i < chat.messages.length; i++) {
+    if (chat.messages[i].id === action.messageId)
+      break;
+  }
+  const newMessage = {...chat.messages[i], blob: action.blob};
+  const messages = [
+    ...chat.messages.slice(0, i),
+    newMessage,
+    ...chat.messages.slice(i+1)
+  ];
+  const newChat = {...chat, messages};
+  return getNewStateWithChat(newChat, state);
+}
+
 // TODO remove chat
-// TODO use different functions for each case.
 function chats(state = new Map(), action) {
-  let chat, newChat, messages;
   switch (action.type) {
     case 'CHATS_RETRIEVE_SUCCEEDED':
       const newState = new Map([...state, ...action.chats]);
       return newState;
 
     case 'MESSAGE_RECEIVED':
-      chat = findChatById(action.message.chatId, state.values())
-      messages = [...chat.messages, action.message];
-      newChat = {...chat, messages};
-      return getNewStateWithChat(newChat, state);
+      return messageReceived(action, state);
 
     case 'REMOVE_CHAT_USER_SUCCEEDED':
-      chat = findChatById(action.data.chatId, state.values());
-      const users = chat.users.filter((u) => u.id !== action.data.userId);
-      newChat = {...chat, users};
-      return getNewStateWithChat(newChat, state);
+      return removeChatUserSucc(action, state);
 
     case 'AUDIO_BLOB_LOADED':
-      chat = findChatById(action.chatId, state.values());
-      let i = 0;
-      for(; i < chat.messages.length; i++) {
-        if (chat.messages[i].id === action.messageId)
-          break;
-      }
-      const newMessage = {...chat.messages[i], blob: action.blob};
-      messages = [
-        ...chat.messages.slice(0, i),
-        newMessage,
-        ...chat.messages.slice(i+1)
-      ];
-      newChat = {...chat, messages};
-      return getNewStateWithChat(newChat, state);
+      return audioBlobLoaded(action, state);
 
     default:
       return state;
