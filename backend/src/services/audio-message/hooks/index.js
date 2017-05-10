@@ -10,21 +10,13 @@ exports.before = {
     auth.restrictToAuthenticated(),
     globalHooks.restrictToJoined()
   ],
-  find: [], // TODO should be message with {chatId}.
-            // We already know that the user is really in that chat.
+  // TODO validations of size
   get: [],
-  create: [shouldHaveChatId()],
-  update: [],
-  patch: [],
-  remove: []
+  create: [shouldHaveChatId(), cannotSetKey()]
 };
 
 exports.after = {
   all: [],
-  find: [],
   get: [],
-  create: [createMessage()],
-  update: [],
-  patch: [],
-  remove: []
+  create: [createMessage()]
 };
