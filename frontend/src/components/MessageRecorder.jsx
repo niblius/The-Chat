@@ -33,18 +33,23 @@ class MessageRecorder extends Component {
     this.recorder = new window.Recorder({
       bitRate: 128*1024,
       encoderSampleRate: 48000,
-      encoderPath: "/js/encoderWorker.min.js"
+      encoderPath: '/js/encoderWorker.min.js',
+      leaveStreamOpen: true
     });
 
-    this.recorder.addEventListener( "dataAvailable", (e) => {
+    this.recorder.addEventListener('dataAvailable', (e) => {
       const blob = new Blob( [e.detail], { type: 'audio/ogg' } );
       this.setState({
         isRecording: false,
-        blob,
+        blob
       });
     });
 
     this.recorder.initStream();
+  }
+
+  componentWillUnmount() {
+    this.recorder.clearStream();
   }
 
   startRecording() {

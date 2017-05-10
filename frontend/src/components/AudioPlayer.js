@@ -28,7 +28,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 // P. S. A bit ugly and repeatable... :()
-
+// TODO if >= 6 audiocontext doesnt work.
 class AMessage extends Component {
   constructor(props) {
     super(props);
