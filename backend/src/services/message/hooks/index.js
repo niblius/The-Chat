@@ -1,11 +1,10 @@
-'use strict';
-
 const globalHooks = require('../../../hooks');
 const hooks = require('feathers-hooks-common');
 const auth = require('feathers-authentication').hooks;
 const shouldHaveChatId = require('./shouldHaveChatId');
 const restrictToOwnerOrAdmin = require('./restrictToOwnerOrAdmin');
 const addUsersField = require('./addUsersField');
+const setUserId = require('./setUserId');
 
 exports.before = {
   all: [
@@ -15,7 +14,7 @@ exports.before = {
     globalHooks.restrictToJoined()
   ],
   find: [shouldHaveChatId()], // maybe don't need this, already checked in restrictToJoined
-  create: [shouldHaveChatId()],
+  create: [shouldHaveChatId(), setUserId()],
   remove: [restrictToOwnerOrAdmin()]
 };
 

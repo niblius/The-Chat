@@ -8,7 +8,8 @@ function mapStateToProps(state) {
   return {
     searchedChat: state.searchedChat,
     currentUser: state.currentUser,
-    chats: state.chats
+    chats: state.chats,
+    audioPlayer: state.audioPlayer
   }
 }
 

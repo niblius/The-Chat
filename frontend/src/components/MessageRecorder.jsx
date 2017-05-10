@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Button } from 'semantic-ui-react';
-// import Wavesurfer from 'wavesurfer';
 import Wavesurfer from 'react-wavesurfer';
 
+// TODO use prview component, use redux for stop/start recording
 class MessageRecorder extends Component {
   constructor(props) {
     super(props);
@@ -22,7 +22,6 @@ class MessageRecorder extends Component {
       playing: false,
       pos: 0
     };
-    console.log(window);
   }
 
   componentDidMount() {
@@ -79,29 +78,35 @@ class MessageRecorder extends Component {
     return (
       <Container>
         {isRecording
-          ? (
-            <div>
-              <Button icon='stop circle' onClick={this.stopRecording} primary/>
-              <div style={{height: '150px', width: '150px', position: 'relative'}}>
-
-              </div>
-            </div>
-          )
-          : (
-            <div>
-              <Button onClick={this.startRecording} icon='unmute' primary/>
-              {(!blob) ? '' : (<Button onClick={this.send} content='Send' labelPosition='left' icon='send' primary/>)}
-              {(!blob) ? '' : (<Button onClick={this.togglePlay} content='Play' labelPosition='left' icon='play' primary/>)}
-              <Wavesurfer
-                audioFile={blob}
-                pos={this.state.pos}
-                onPosChange={this.handlePosChange}
-                playing={this.state.playing}
-                ref="wavesurfer"/>
-            </div>
-          )}
-      </Container>
-    );
+          ? (<Button icon='stop circle' onClick={this.stopRecording} primary/>)
+          : (<div>
+                <Button onClick={this.startRecording} icon='unmute' primary/>
+                {(!blob) ? ''
+                  : (<div>
+                      <Button
+                        onClick={this.send}
+                        content='Send'
+                        labelPosition='left'
+                        icon='send'
+                        primary/>
+                      <Button
+                        onClick={this.togglePlay}
+                        content='Play'
+                        labelPosition='left'
+                        icon='play'
+                        primary/>
+                      <Wavesurfer
+                        audioFile={blob}
+                        pos={this.state.pos}
+                        onPosChange={this.changePosition}
+                        playing={this.state.playing}
+                        options={{
+                          hideScrollbar: true,
+                          height: 50
+                        }}/>
+                    </div>)}
+              </div>)}
+      </Container>);
   }
 }
 

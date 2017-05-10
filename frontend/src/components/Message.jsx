@@ -1,5 +1,6 @@
 import React from 'react';
-import { Comment } from 'semantic-ui-react'
+import { Comment } from 'semantic-ui-react';
+import {AudioMessage} from './AudioPlayer';
 
 const Message = (message, user) => {
   const date = new Date(message.createdAt);
@@ -15,9 +16,13 @@ const Message = (message, user) => {
           <Comment.Metadata>
             <div>Sent at {formattedDate}</div>
           </Comment.Metadata>
-          <Comment.Text>{message.body}</Comment.Text>
+          <Comment.Text>
+            {(message.blobId) ? (<AudioMessage blob={message.blob} message={message}/>) : ''}
+            {message.body}
+          </Comment.Text>
         </Comment.Content>
       </Comment>
   );
 }
+
 export default Message;

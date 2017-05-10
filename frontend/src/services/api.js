@@ -84,7 +84,12 @@ export function trySendAudioMessage(blob, chatId) {
       reader.readAsDataURL(blob);
     }).then((result) => {
       return audioMessages
-        .create({uri: result});
+        .create({uri: result, chatId}, {chatId});
     });
   });
+}
+
+export function tryLoadAudio(blobId) {
+  const audioMessages = app.service('audio-messages');
+  return audioMessages.get(blobId);
 }

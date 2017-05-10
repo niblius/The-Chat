@@ -8,7 +8,8 @@ import {
   trySendMessage,
   tryJoinChat,
   tryRemoveChatUser,
-  trySendAudioMessage} from '../services/api';
+  trySendAudioMessage,
+  tryLoadAudio } from '../services/api';
 import { browserHistory } from 'react-router';
 
 export function searchChat(link) {
@@ -270,4 +271,48 @@ export function sendAudioMessage(blob, chatId) {
       });
     }
   }
+}
+
+export function startPlaying(playingType, chatId, messageId) {
+  return (dispatch) => {
+    dispatch({
+      type: 'START_PLAYING',
+      playingType,
+      chatId,
+      messageId
+    });
+  }
+}
+
+export function stopPlaying() {
+  return (dispatch) => {
+    dispatch({
+      type: 'STOP_PLAYING'
+    });
+  };
+}
+
+export function loadAudioFor(message) {
+  return async (dispatch) => {
+    dispatch({
+      type: 'AUDIO_BLOB_LOADING_REQUESTED'
+    });
+    try {
+      const blob = await tryLoadAudio(message.blobId);
+      console.log(blob);
+      dispatch({
+        type: 'AUDIO_BLOB_LOADED',
+        blob,
+        messageId: message.id,
+        chatId: message.chatId
+      });
+      startPlaying('message', message.chatId, message.id)(dispatch);
+    } catch(err) {
+      console.log(e);
+      dispatch({
+        type: 'AUDIO_BLOB_LOADING_ERROR',
+        err
+      });
+    }
+  };
 }

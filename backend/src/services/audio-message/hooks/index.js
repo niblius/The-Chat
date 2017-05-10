@@ -1,6 +1,16 @@
+const globalHooks = require('../../../hooks');
+const auth = require('feathers-authentication').hooks;
+const createMessage = require('./createMessage');
+
 exports.before = {
-  all: [],
-  find: [],
+  all: [
+    auth.verifyToken(),
+    auth.populateUser(),
+    auth.restrictToAuthenticated(),
+    globalHooks.restrictToJoined()
+  ],
+  find: [], // TODO should be message with {chatId}.
+            // We already know that the user is really in that chat.
   get: [],
   create: [],
   update: [],
@@ -12,7 +22,7 @@ exports.after = {
   all: [],
   find: [],
   get: [],
-  create: [],
+  create: [createMessage()],
   update: [],
   patch: [],
   remove: []
