@@ -302,13 +302,12 @@ export function loadAudioFor(message) {
       console.log(blob);
       dispatch({
         type: 'AUDIO_BLOB_LOADED',
-        blob,
+        blob: blob.uri,
         messageId: message.id,
         chatId: message.chatId
       });
-      startPlaying('message', message.chatId, message.id)(dispatch);
     } catch(err) {
-      console.log(e);
+      console.log(err);
       dispatch({
         type: 'AUDIO_BLOB_LOADING_ERROR',
         err

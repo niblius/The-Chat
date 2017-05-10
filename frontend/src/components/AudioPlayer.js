@@ -34,6 +34,8 @@ class AMessage extends Component {
     super(props);
     this.togglePlay = this.togglePlay.bind(this);
     this.changePosition = this.changePosition.bind(this);
+    this.onReady = this.onReady.bind(this);
+    this.onFinish = this.onFinish.bind(this);
     this.state = { pos: 0 };
   }
 
@@ -56,27 +58,39 @@ class AMessage extends Component {
     }
   }
 
+  onReady() {
+    const message = this.props.message;
+    this.props.startPlaying('message', message.chatId, message.id);
+  }
+
+  onFinish() {
+    this.props.stopPlaying();
+  }
+
   isPlaying() {
     return this.props.audioPlayer.playingType === 'message' &&
       this.props.audioPlayer.messageId === this.props.message.id;
   }
 
   render() {
+    const blob = this.props.message.blob;
     return (<div>
-              <Wavesurfer
-                audioFile={this.props.message.blob}
-                pos={this.state.pos}
-                onPosChange={this.changePosition}
-                playing={this.isPlaying()}
-                options={{
-                  hideScrollbar: true,
-                  height: 50
-                }}/>
+              {(blob) ? (<Wavesurfer
+                          audioFile={blob}
+                          pos={this.state.pos}
+                          onPosChange={this.changePosition}
+                          playing={this.isPlaying()}
+                          onReady={this.onReady}
+                          onFinish={this.onFinish}
+                          options={{
+                            hideScrollbar: true,
+                            height: 50
+                          }}/>) : null }
               <Icon
                 onClick={this.togglePlay}
                 name={this.isPlaying() ? 'stop' : 'play'}
                 circular={true}/>
-            </div>);
+            </div>)
   }
 }
 
@@ -86,6 +100,7 @@ class APreview extends Component {
     this.blob = props.blob;
     this.chatId = props.chatId;
     this.togglePlay = this.togglePlay.bind(this);
+    this.onFinish = this.onFinish.bind(this);
     this.handlePosChange = this.handlePosChange.bind(this);
     this.state = { pos: 0 };
   }
@@ -109,6 +124,10 @@ class APreview extends Component {
       this.props.audioPlayer.chatId === this.chatId;
   }
 
+  onFinish() {
+    this.props.stopPlaying();
+  }
+
   render() {
     return (<div>
               <Wavesurfer
@@ -116,6 +135,7 @@ class APreview extends Component {
                 pos={this.state.pos}
                 onPosChange={this.changePosition}
                 playing={this.isPlaying()}
+                onFinish={this.onFinish}
                 options={{
                   hideScrollbar: true,
                   height: 50
