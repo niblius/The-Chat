@@ -14,7 +14,7 @@ const store = createStore(
   applyMiddleware(thunk)
 );
 
-const host = 'http://localhost:3030';
+const host = 'http://178.62.45.129';
 const socket = io(host);
 export const app = feathers()
   .configure(soceketio(socket))

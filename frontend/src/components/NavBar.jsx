@@ -13,7 +13,7 @@ class NavBar extends Component {
   loggedIn() {
     return (
      <Menu.Menu position='right'>
-       <Menu.Item name='user' onClick={() => browserHistory.push('/profile')}>
+       <Menu.Item name='user' onClick={() => browserHistory.push('/chats/new')}>
         {this.props.currentUser.data.email}
        </Menu.Item>
 

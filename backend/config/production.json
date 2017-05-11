@@ -1,12 +1,20 @@
 {
-  "host": "the-chat-backend-app.feathersjs.com",
-  "port": 80,
-  "nedb": "NEDB_BASE_PATH",
+  "host": "localhost",
+  "port": 8080,
   "public": "../public/",
   "auth": {
     "token": {
-      "secret": "FEATHERS_AUTH_SECRET"
+      "secret": "6dVsQa7lkt8Y9IpAImusNIy8VtZAxHzvKKN8kTL9rm0opKQKQM1xfEPCWE2cPcEAxiuQt+IlBowsFJs5h2mNYw==",
+      "idField": "id"
     },
     "local": {}
+  },
+  "db-settings": {
+    "username": "thechatdbuser",
+    "password": "DhfgdrfgY435%^4V",
+    "database": "thechatDB-production",
+    "host": "127.0.0.1",
+    "port": "5432",
+    "dialect": "postgres"
   }
 }
