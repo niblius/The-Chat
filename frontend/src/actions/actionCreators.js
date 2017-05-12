@@ -271,6 +271,13 @@ export function startPlaying(playingType, chatId, messageId) {
   };
 }
 
+export function forcedStartPlaying(playingType, chatId, messageId) {
+  return (dispatch) => {
+    dispatch(turnAutoplayOff());
+    dispatch(startPlaying(playingType, chatId, messageId));
+  }
+}
+
 export function stopPlaying() {
   return {
     type: 'STOP_PLAYING'
@@ -311,5 +318,11 @@ export function setAutoplayChatId(id) {
 export function turnAutoplayOff() {
   return {
     type: 'TURN_AUTO_PLAY_OFF'
+  };
+}
+
+export function finishedPlaying() {
+  return {
+    type: 'FINISHED_PLAYING'
   };
 }

@@ -8,8 +8,7 @@ export function onMessageCreated(dispatch, autoplayId) {
       message
     });
 
-    if (autoplayId != null) {
-      // add message to queue
+    if (autoplayId != null && message.chatId === autoplayId) {
       await loadAudioFor(message)(dispatch);
       dispatch(startPlaying('message', message.chatId, message.id));
     }

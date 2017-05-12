@@ -4,9 +4,10 @@ import React, { Component } from 'react';
 import { Icon } from 'semantic-ui-react';
 import Wavesurfer from 'react-wavesurfer';
 import {
-  startPlaying,
+  forcedStartPlaying,
   stopPlaying,
-  loadAudioFor
+  loadAudioFor,
+  finishedPlaying
 } from '../actions/actionCreators';
 
 function mapStateToProps(state) {
@@ -17,9 +18,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    startPlaying,
+    forcedStartPlaying,
     stopPlaying,
-    loadAudioFor
+    loadAudioFor,
+    finishedPlaying
   }, dispatch);
 }
 
@@ -29,8 +31,6 @@ class AMessage extends Component {
     super(props);
     this.togglePlay = this.togglePlay.bind(this);
     this.changePosition = this.changePosition.bind(this);
-    this.onReady = this.onReady.bind(this);
-    this.onFinish = this.onFinish.bind(this);
     this.state = { pos: 0 };
   }
 
@@ -46,20 +46,12 @@ class AMessage extends Component {
         this.props.stopPlaying();
     } else {
       if (message.blob) {
-        this.props.startPlaying('message', message.chatId, message.id);
+        this.props.forcedStartPlaying('message', message.chatId, message.id);
       } else {
         this.props.loadAudioFor(message);
+        this.props.forcedStartPlaying('message', message.chatId, message.id);
       }
     }
-  }
-
-  onReady() {
-    const message = this.props.message;
-    this.props.startPlaying('message', message.chatId, message.id);
-  }
-
-  onFinish() {
-    this.props.stopPlaying();
   }
 
   isPlaying() {
@@ -75,8 +67,8 @@ class AMessage extends Component {
                           pos={this.state.pos}
                           onPosChange={this.changePosition}
                           playing={this.isPlaying()}
-                          onReady={this.onReady}
-                          onFinish={this.onFinish}
+                          onReady={() => this.forceUpdate()}
+                          onFinish={this.props.finishedPlaying}
                           options={{
                             hideScrollbar: true,
                             height: 50,
@@ -96,7 +88,6 @@ class APreview extends Component {
     this.blob = props.blob;
     this.chatId = props.chatId;
     this.togglePlay = this.togglePlay.bind(this);
-    this.onFinish = this.onFinish.bind(this);
     this.changePosition = this.changePosition.bind(this);
     this.state = { pos: 0 };
   }
@@ -111,17 +102,13 @@ class APreview extends Component {
     if (this.isPlaying()) {
         this.props.stopPlaying();
     } else {
-      this.props.startPlaying('preview', this.chatId);
+      this.props.forcedStartPlaying('preview', this.chatId);
     }
   }
 
   isPlaying() {
     return this.props.audioPlayer.playingType === 'preview' &&
       this.props.audioPlayer.chatId === this.chatId;
-  }
-
-  onFinish() {
-    this.props.stopPlaying();
   }
 
   render() {
@@ -131,7 +118,7 @@ class APreview extends Component {
                 pos={this.state.pos}
                 onPosChange={this.changePosition}
                 playing={this.isPlaying()}
-                onFinish={this.onFinish}
+                onFinish={this.props.finishedPlaying}
                 options={{
                   hideScrollbar: true,
                   height: 50,

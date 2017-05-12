@@ -19,3 +19,4 @@
 - delete user glitch (in console)
 - fix no leading zero in "sent at"
 - fix autoplay on refresh
+- loading

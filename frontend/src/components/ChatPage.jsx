@@ -19,6 +19,11 @@ class ChatPage extends Component {
     this.props.retrieveChatList(userId);
   }
 
+  componentDidMount() {
+    subscribeToOnCreateMessage(
+      onMessageCreated(this.props.dispatch, this.props.audioPlayer.autoplayChatId));
+  }
+
   componentWillReceiveProps(nextProps) {
     // resubscribes for new autoplayId
     const newAutoplayId = nextProps.audioPlayer.autoplayChatId;
@@ -36,10 +41,12 @@ class ChatPage extends Component {
       ? null
       : this.currentChat.users.find((u) => u.chatUser.role === 'admin');
     if (!this.currentChat) {
-      return (
+      return ( // TODO chatList dublicate
         <Grid>
-          <ChatList chats={this.props.chats}
-            current={this.props.router.params.chatLink}/>
+          <ChatList
+            chats={this.props.chats}
+            current={this.props.router.params.chatLink}
+            audioPlayer={this.props.audioPlayer}/>
           <Grid.Column stretched width={12}>
             <Segment>Choose the chat.</Segment>
           </Grid.Column>
@@ -48,9 +55,10 @@ class ChatPage extends Component {
     } else {
       return (
         <Grid>
-          <ChatList chats={this.props.chats}
+          <ChatList
+            chats={this.props.chats}
             current={this.props.router.params.chatLink}
-            playingId={this.props.audioPlayer.chatId}/>
+            audioPlayer={this.props.audioPlayer}/>
           <Grid.Column stretched width={8}>
             <MessageList
               messages={this.currentChat.messages}
