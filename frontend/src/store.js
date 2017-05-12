@@ -3,7 +3,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import { browserHistory } from 'react-router'
 import thunk from 'redux-thunk'
 import feathers from 'feathers-client';
-import soceketio from 'feathers-socketio/client';
+import socketio from 'feathers-socketio/client';
 import io from 'socket.io-client';
 
 import rootReducer from './reducers/index';
@@ -14,10 +14,10 @@ const store = createStore(
   applyMiddleware(thunk)
 );
 
-const host = 'http://178.62.45.129';
+const host = 'http://localhost:3030';
 const socket = io(host);
 export const app = feathers()
-  .configure(soceketio(socket))
+  .configure(socketio(socket))
   .configure(feathers.hooks())
   .configure(feathers.authentication({ storage: window.localStorage }));
 

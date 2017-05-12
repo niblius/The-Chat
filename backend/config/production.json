@@ -1,7 +1,7 @@
 {
   "host": "localhost",
   "port": 8080,
-  "public": "../public/",
+  "public": "../../frontend/build/",
   "auth": {
     "token": {
       "secret": "6dVsQa7lkt8Y9IpAImusNIy8VtZAxHzvKKN8kTL9rm0opKQKQM1xfEPCWE2cPcEAxiuQt+IlBowsFJs5h2mNYw==",
