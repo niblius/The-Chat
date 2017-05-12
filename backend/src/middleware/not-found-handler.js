@@ -6,6 +6,6 @@ const path = require('path');
 module.exports = function(app) {
   return function(req, res, next) {
     // next(new errors.NotFound('Page not found'));
-    res.sendFile(path.join('../../', app.get('public'), 'index.html'));
+    res.sendFile(path.join(app.get('public'), 'index.html'));
   };
 };

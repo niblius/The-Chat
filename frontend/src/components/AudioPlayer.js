@@ -9,7 +9,6 @@ import {
   loadAudioFor
 } from '../actions/actionCreators';
 
-// TODO highlight the playing chat.
 function mapStateToProps(state) {
   return {
     audioPlayer: state.audioPlayer
@@ -84,7 +83,8 @@ class AMessage extends Component {
                           onFinish={this.onFinish}
                           options={{
                             hideScrollbar: true,
-                            height: 50
+                            height: 50,
+                            audioContext: this.props.audioPlayer.audioContext
                           }}/>) : null }
               <Icon
                 onClick={this.togglePlay}
@@ -138,7 +138,8 @@ class APreview extends Component {
                 onFinish={this.onFinish}
                 options={{
                   hideScrollbar: true,
-                  height: 50
+                  height: 50,
+                  audioContext: this.props.audioPlayer.audioContext
                 }}/>
               <Icon
                 onClick={this.togglePlay}
