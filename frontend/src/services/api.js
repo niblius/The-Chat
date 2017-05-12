@@ -43,7 +43,7 @@ export function tryRetrieveChatList(userId) {
     }
   })
   .then((result) => {
-    console.log(result); // TODO change sequelize naming to more convenient one
+    console.log(result);
     const chats = new Map();
     result.data.forEach(({ chat }) => {
       chats.set(chat.link, chat)
@@ -63,9 +63,14 @@ export function tryJoinChat(chatId) {
   return chatUsers.create({chatId});
 }
 
-export function subscribeToChats(messageReceived) {
+export function subscribeToOnCreateMessage(messageReceived) {
   const messages = app.service('messages');
   messages.on('created', messageReceived);
+}
+
+export function removeAllOnCreateMessageListeners() {
+  const messages = app.service('messages');
+  messages.removeAllListeners('created');
 }
 
 export function tryRemoveChatUser(userId, chatId) {

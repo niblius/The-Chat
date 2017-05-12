@@ -15,9 +15,6 @@ function mapStateToProps(state) {
   };
 }
 
-// TODO should load blob only when pressed play:
-//        when pressed play dispact action "request load" and then start playion.
-
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     startPlaying,
@@ -27,7 +24,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 // P. S. A bit ugly and repeatable... :()
-// TODO if >= 6 audiocontext doesnt work.
 class AMessage extends Component {
   constructor(props) {
     super(props);

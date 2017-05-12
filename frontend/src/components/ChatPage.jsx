@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Grid, Segment } from 'semantic-ui-react';
-import { subscribeToChats } from '../services/api';
+import {
+  subscribeToOnCreateMessage,
+  removeAllOnCreateMessageListeners } from '../services/api';
+import { onMessageCreated } from '../actions/serviceListeners';
 
 import ChatList from './ChatList.jsx';
 import MessageList from './MessageList.jsx';
@@ -14,7 +17,17 @@ class ChatPage extends Component {
     const userId = this.props.currentUser.data.id;
 
     this.props.retrieveChatList(userId);
-    subscribeToChats(this.props.onMessageCreated);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // resubscribes for new autoplayId
+    const newAutoplayId = nextProps.audioPlayer.autoplayChatId;
+    const oldAutoplayId = this.props.audioPlayer.autoplayChatId;
+    if (oldAutoplayId !== newAutoplayId) {
+      removeAllOnCreateMessageListeners();
+      subscribeToOnCreateMessage(
+        onMessageCreated(nextProps.dispatch, newAutoplayId));
+    }
   }
 
   render() {
@@ -43,10 +56,7 @@ class ChatPage extends Component {
               messages={this.currentChat.messages}
               users={this.currentChat.users}
               chatName={this.currentChat.title} />
-            <MessageRecorder
-              chatId={this.currentChat.id}
-              sendAudioMessage={this.props.sendAudioMessage}
-              sendTextOnlyMessage={this.props.sendTextMessage}/>
+            <MessageRecorder chatId={this.currentChat.id}/>
           </Grid.Column>
           <UserList
             users={this.currentChat.users}

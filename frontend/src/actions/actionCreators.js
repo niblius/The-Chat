@@ -166,7 +166,6 @@ export function retrieveChatList(userId) {
 }
 
 export function sendTextMessage(text, chatId) {
-  // TODO no need userId, authentification has already cared about it.
   return async (dispatch) => {
     dispatch({
       type: 'CREATE_MESSAGE_REQUESTED',
@@ -239,16 +238,6 @@ export function removeUser(userId, chatId) {
   }
 }
 
-export function onMessageCreated(message) {
-  return async (dispatch) => {
-    console.log(message);
-    dispatch({
-      type: 'MESSAGE_RECEIVED',
-      message
-    });
-  };
-}
-
 export function sendAudioMessage(blob, text, chatId) {
   return async (dispatch) => {
     dispatch({
@@ -274,21 +263,17 @@ export function sendAudioMessage(blob, text, chatId) {
 }
 
 export function startPlaying(playingType, chatId, messageId) {
-  return (dispatch) => {
-    dispatch({
-      type: 'START_PLAYING',
-      playingType,
-      chatId,
-      messageId
-    });
-  }
+  return {
+    type: 'START_PLAYING',
+    playingType,
+    chatId,
+    messageId
+  };
 }
 
 export function stopPlaying() {
-  return (dispatch) => {
-    dispatch({
-      type: 'STOP_PLAYING'
-    });
+  return {
+    type: 'STOP_PLAYING'
   };
 }
 
@@ -313,5 +298,18 @@ export function loadAudioFor(message) {
         err
       });
     }
+  };
+}
+
+export function setAutoplayChatId(id) {
+    return {
+      type: 'SET_AUTO_PLAY_CHAT_ID',
+      chatId: id
+    };
+}
+
+export function turnAutoplayOff() {
+  return {
+    type: 'TURN_AUTO_PLAY_OFF'
   };
 }

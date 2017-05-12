@@ -13,8 +13,9 @@
 - amazon
 
 
-- 6 audio glitch
+
 - enter -> sends messages
 - auto play buttom
 - delete user glitch (in console)
 - fix no leading zero in "sent at"
+- fix autoplay on refresh
