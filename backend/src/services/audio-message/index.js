@@ -1,5 +1,3 @@
-'use strict';
-
 const blobService = require('feathers-blob');
 const fs = require('fs-blob-store');
 const blobStorage = fs(__dirname + '/uploads');

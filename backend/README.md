@@ -22,17 +22,18 @@ BUGS:
 
 
 TODO:
-2) Requests to join (issued by admin of the chat). (when issuing use Modal). For notifications taht received a request use popup
+2) Requests to join (issued by admin of the chat). (when issuing use Modal). For notifications that received a request use popup.
 3) Events on joining/leaving chat.
 4) Search chats, use semantic search. Show Modal, when pressed on the chat
 5) Join link: simply if such chat not found do search and press join.
-6) CSS Height of the chat page and its components
-7) Home page: use semantic steps create accout > create your chat > join chat others' chats
-8) Forms width
-9) Avatars for users and chats. (Can use same blob service).
-10) vertical align of autoplay button and use CHECKBOX instead of icon
-11) enter -> sends messages, other keys for record/sending/etc
-12) audio-message validation
-13) filters for files! no events!
-14) remove user
-15) loading progress, use semantic progress
+6) Events on join requests.
+7) CSS Height of the chat page and its components
+8) Home page: use semantic steps create accout > create your chat > join chat others' chats
+9) Forms width
+10) Avatars for users and chats. (Can use same blob service).
+11) vertical align of autoplay button and use CHECKBOX instead of icon
+12) enter -> sends messages, other keys for record/sending/etc
+13) audio-message validation
+14) filters for files! no events!
+15) remove user
+16) loading progress, use semantic progress

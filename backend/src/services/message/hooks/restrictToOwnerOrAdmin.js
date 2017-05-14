@@ -9,7 +9,7 @@ function sameUserIdOrAdmin(hook, userId) {
 
 function restrictToOwnerOrAdmin() {
   return (hook) => {
-    if (hook.id === null || hook.id === undefined) {
+    if (hook.id == null) {
       sameUserIdOrAdmin(hook, hook.params.query.userId);
     }
 

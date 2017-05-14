@@ -17,7 +17,7 @@ function restrictToJoined(role) {
     }
 
     const userId = hook.params.user.id;
-    let chatId, objId = null;
+    let chatId = 0, objId = null;
     if (hook.method.match('get')) {
       objId = hook.id;
     } else if (hook.method.match('find')) {
@@ -32,12 +32,14 @@ function restrictToJoined(role) {
       }
     }
 
-    if (objId === null) {
+    if (chatId !== null) {
       return isJoined(hook, userId, chatId, role);
-    } else {
+    } else if (objId !== null) {
       return hook.service.get(objId).then((res) => {
         return isJoined(hook, userId, res.chatId, role);
       });
+    } else {
+      return Promise.resolve(null);
     }
   }
 }

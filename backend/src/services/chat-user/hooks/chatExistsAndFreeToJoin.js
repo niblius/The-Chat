@@ -7,6 +7,7 @@ function chatExistsAndFreeToJoin() {
 
     const chats = hook.app.service('chats');
     return chats.get(hook.data.chatId).then((result) => {
+      // TODO use SEQUELIZE to COUNT both chat with such id and join request.
       if(!result.link)
         throw new BadRequest('Cannot join to the private chat.');
 

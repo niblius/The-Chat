@@ -1,8 +1,5 @@
-'use strict';
-
 const hooks = require('./hooks');
 const service = require('feathers-sequelize');
-const db = require('../../models');
 
 module.exports = function(){
   const app = this;
