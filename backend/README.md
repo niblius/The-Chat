@@ -24,7 +24,7 @@ BUGS:
 TODO:
 2) Requests to join (issued by admin of the chat). (when issuing use Modal). For notifications that received a request use popup.
 3) Events on joining/leaving chat.
-4) Search chats, use semantic search. Show Modal, when pressed on the chat
+4) Search chats, use semantic search. Show Modal, when pressed on the chat. Use load icon (<input loading>) during search.
 5) Join link: simply if such chat not found do search and press join.
 6) Events on join requests.
 7) CSS Height of the chat page and its components

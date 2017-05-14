@@ -1,12 +1,23 @@
 import React from 'react';
-import { Grid, List, Header } from 'semantic-ui-react'
+import { Grid, List, Header, Button} from 'semantic-ui-react'
 
 import UserListItem from './UserListItem.jsx';
+import AddUserModal from './AddUserModal.jsx';
 
-let UserList = ({ users, isAdmin, removeUser }) => {
+let UserList = ({ chat, isAdmin, removeUser }) => {
+  const users = chat.users;
   return (
     <Grid.Column width={4}>
-      <Header>Users</Header>
+      {isAdmin &&
+        (<Header>
+          <AddUserModal
+            trigger={<Button
+                        basic
+                        name='user'
+                        style={{width: '100%'}}
+                        content='Add users'/>}
+            chatId={chat.id}/>
+        </Header>)}
       <List divided verticalAlign='middle'>
         { users.map((u) => UserListItem(u, isAdmin, removeUser)) }
       </List>

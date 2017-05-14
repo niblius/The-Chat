@@ -14,11 +14,7 @@ exports.before = {
     auth.populateUser(),
     auth.restrictToAuthenticated()
   ],
-  get: [
-    auth.verifyToken(),
-    auth.populateUser(),
-    auth.restrictToAuthenticated(),
-  ],
+  get: [],
   create: [
     validatePassword(),
     auth.hashPassword()

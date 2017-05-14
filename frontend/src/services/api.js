@@ -98,3 +98,13 @@ export function tryLoadAudio(blobId) {
   const audioMessages = app.service('audio-messages');
   return audioMessages.get(blobId);
 }
+
+export function tryFindUser(email) {
+  const users = app.service('users');
+  return users.find({
+    query: {
+      '$limit': 1,
+      email
+    }
+  }).then((result, err) => result.data);
+}

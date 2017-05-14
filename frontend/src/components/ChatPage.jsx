@@ -62,14 +62,13 @@ class ChatPage extends Component {
           <Grid.Column stretched width={8}>
             <MessageList
               messages={this.currentChat.messages}
-              users={this.currentChat.users}
-              chatName={this.currentChat.title} />
+              users={this.currentChat.users}/>
             <MessageRecorder chatId={this.currentChat.id}/>
           </Grid.Column>
           <UserList
-            users={this.currentChat.users}
             isAdmin={admin.id === this.props.currentUser.data.id}
-            removeUser={(userId) => this.props.removeUser(userId, this.currentChat.id)}/>
+            removeUser={(userId) => this.props.removeUser(userId, this.currentChat.id)}
+            chat={this.currentChat}/>
         </Grid>
       );
     }

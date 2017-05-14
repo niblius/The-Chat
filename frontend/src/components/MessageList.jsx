@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Comment, Segment, Header } from 'semantic-ui-react';
+import { Comment, Segment } from 'semantic-ui-react';
 import Scroll from 'react-scroll';
 
 import Message from './Message.jsx';
@@ -33,9 +33,9 @@ class MessageList extends Component {
   render() {
     return (
         <Comment.Group>
-          <Header as='h3' dividing>{this.props.chatName}</Header>
           <Segment
             style={{
+                marginTop: '0',
                 height: '500px',
                 overflowY: 'auto',
                 whiteSpace: 'nowrap'

@@ -9,7 +9,7 @@ function findChatById(id, chats) {
 function getNewStateWithChat(newChat, oldState) {
   return new Map([
     ...oldState,
-    [newChat.link, newChat]
+    [newChat.link || newChat.id.toString(), newChat]
   ]);
 }
 
