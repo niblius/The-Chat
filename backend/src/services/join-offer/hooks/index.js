@@ -4,7 +4,8 @@ const auth = require('feathers-authentication').hooks;
 const globalHooks = require('../../../hooks');
 const populateAssociations = require('./populateAssociations');
 const restrictToAdminOrUser = require('./restrictToAdminOrUser');
-const shouldHaveChatIdAndUserId = requrie('./shouldHaveChatIdAndUserId');
+const shouldHaveChatIdAndUserId = require('./shouldHaveChatIdAndUserId');
+const setIssuedBy = require('./setIssuedBy');
 
 exports.before = {
   all: [
@@ -17,6 +18,9 @@ exports.before = {
     restrictToAdminOrUser()
   ],
   create: [
+    // TODO add role
+    // TODO throw if an offer with the same role already exists
+    setIssuedBy(),
     globalHooks.restrictToChatAdmin()
   ],
   remove: [
@@ -28,6 +32,6 @@ exports.before = {
 exports.after = {
   all: [],
   find: [],
-  create: [,
+  create: [],
   remove: []
 };

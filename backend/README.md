@@ -1,7 +1,7 @@
 - audio-message validation
 - filters for files! no events!
 - messages about: left chat, joined chat and so on.
-- different rights
+- different rights, user multiple chat-users and multiple join offers
 + list of users, if admin ability to remove user from the chat
 - link or id in the url. if doesn't start with @ - id
 - url to join chat

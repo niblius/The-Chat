@@ -6,6 +6,8 @@ function userSearch(state = {}, action) {
       return {result: 'not found'}
     case 'USER_FOUND':
       return {result: 'found', foundUser: action.user}
+    case 'CLEAR_SEARCH':
+      return {};
     default:
       return state;
   }

@@ -10,7 +10,8 @@ import {
   tryRemoveChatUser,
   trySendAudioMessage,
   tryLoadAudio,
-  tryFindUser } from '../services/api';
+  tryFindUser,
+  tryCreateJoinOffer } from '../services/api';
 import { browserHistory } from 'react-router';
 
 export function searchChat(link) {
@@ -329,7 +330,26 @@ export function finishedPlaying() {
 
 export function createJoinOffer(userId, chatId) {
   return async (dispatch) => {
+    dispatch({
+      type: 'CREATE_JOIN_OFFER_REQUESTED',
+      userId,
+      chatId
+    });
 
+    try {
+      const offer = await tryCreateJoinOffer(userId, chatId);
+      console.log(offer);
+      dispatch({
+        type: 'CREATE_JOIN_OFFER_SUCCEEDED',
+        offer
+      });
+    } catch(err) {
+      console.log(err);
+      dispatch({
+        type: 'CREATE_JOIN_OFFER_FAILED',
+        err
+      });
+    }
   };
 }
 
@@ -340,6 +360,7 @@ export function findUser(email) {
     });
     try {
       const data = await tryFindUser(email);
+      console.log(data);
       if (data.length > 0) {
         dispatch({
           type: 'USER_FOUND',
@@ -357,5 +378,11 @@ export function findUser(email) {
         err
       });
     }
+  };
+}
+
+export function clearSearch() {
+  return {
+    type: 'CLEAR_SEARCH'
   };
 }

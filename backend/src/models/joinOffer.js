@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-  var JoinOffer = sequelize.define('JoinOffer', {
+  var JoinOffer = sequelize.define('joinOffer', {
     userId: {
       type: DataTypes.INTEGER,
       references: {

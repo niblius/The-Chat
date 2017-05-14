@@ -1,6 +1,6 @@
 const BadRequest = require('feathers-errors').BadRequest;
 
-module.exports = () = {
+module.exports = () => {
   return (hook) => {
     const query = hook.params.query;
     const user = hook.params.user;

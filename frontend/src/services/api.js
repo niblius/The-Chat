@@ -108,3 +108,8 @@ export function tryFindUser(email) {
     }
   }).then((result, err) => result.data);
 }
+
+export function tryCreateJoinOffer(userId, chatId) {
+  const joinOffers = app.service('join-offers');
+  return joinOffers.create({userId, chatId});
+}

@@ -1,6 +1,12 @@
 module.exports = {
   up: function(queryInterface, Sequelize) {
-    return queryInterface.createTable('joinOffer', {
+    return queryInterface.createTable('joinOffers', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
       userId: {
         allowNull: false,
         type: Sequelize.INTEGER
@@ -24,6 +30,6 @@ module.exports = {
     });
   },
   down: function(queryInterface, Sequelize) {
-    return queryInterface.dropTable('joinOffer');
+    return queryInterface.dropTable('joinOffers');
   }
 };

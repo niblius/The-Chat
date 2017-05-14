@@ -28,7 +28,7 @@ exports.before = {
     chatExistsAndFreeToJoin(),
     setUserIdIfExternal(),
     cannotSetRole(),
-    notJoinedAlready(),  // TODO allow multiple, different roles
+    notJoinedAlready(),  // TODO allow multiple, but different roles!
   ],
   remove: [
     globalHooks.restrictToChatAdmin(),
