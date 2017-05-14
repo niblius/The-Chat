@@ -1,4 +1,4 @@
-+ all the restrictions and validations
+- audio-message validation
 - filters for files! no events!
 - messages about: left chat, joined chat and so on.
 - different rights
@@ -15,8 +15,10 @@
 
 
 - enter -> sends messages
-- auto play buttom
 - delete user glitch (in console)
 - fix no leading zero in "sent at"
-- fix autoplay on refresh
-- loading
+- loading progress
+- frontend validation
+
+
+- Home page: use semantic steps create accout > create your chat > join chat others' chats

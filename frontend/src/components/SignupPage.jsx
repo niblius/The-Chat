@@ -1,41 +1,54 @@
 import React, { Component } from 'react';
-import { Button, Form } from 'semantic-ui-react';
+import { Form } from 'formsy-semantic-ui-react';
+import { Label } from 'semantic-ui-react';
 
 class SignupPage extends Component {
   constructor(props) {
     super(props);
-
-    this.email = '';
-    this.password = '';
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
-    this.props.signup(this.email, this.password);
-    this.email = '';
-    this.password = '';
+  handleSubmit(data, reset, invalidate) {
+    this.props.signup(data.email, data.password, invalidate);
   }
 
   render() {
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Form.Field>
-          <label>Email</label>
-          <input
-            name='email'
-            onChange={(e) => {this.email = e.target.value}}
-            placeholder='Email'/>
-        </Form.Field>
-        <Form.Field>
-          <label>Password</label>
-          <input
-            name='password'
-            onChange={(e) => this.password = e.target.value}
-            placeholder='Password'
-            type='password'/>
-        </Form.Field>
-        <Button type='submit'>Sign up</Button>
+      <Form onValidSubmit={this.handleSubmit}>
+        <Form.Input
+          required
+          name='email'
+          label='Email'
+          validations='isEmail'
+          placeholder='example@email.com'
+          errorLabel={ <Label color='red' pointing/> }
+          validationErrors={{
+            isEmail: 'Should be a valid email',
+            isDefaultRequiredValue: 'Required',
+          }}/>
+        <Form.Input
+          required
+          label='Password'
+          name='password'
+          placeholder='password'
+          type='password'
+          errorLabel={ <Label color='red' pointing/> }
+          validations={{
+            matchRegexp: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,30}$/
+          }}
+          validationErrors={{
+            matchRegexp: 'Should be more or equal than 8 symbols in length'
+                       + ' and contain at least one lower case'
+                       + ' lettter, one upper case letter and one number.'
+          }}/>
+        <Form.Input
+          required
+          label='Retype password'
+          name='password-ret'
+          placeholder='password'
+          type='password'
+          validations='equalsField:password'/>
+        <Form.Button type='submit'>Sign up</Form.Button>
       </Form>
     )
   }

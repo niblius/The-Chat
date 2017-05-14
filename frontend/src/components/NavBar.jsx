@@ -13,12 +13,12 @@ class NavBar extends Component {
   loggedIn() {
     return (
      <Menu.Menu position='right'>
-       <Menu.Item name='user' onClick={() => browserHistory.push('/chats/new')}>
+       <Menu.Item name='user' onClick={() => browserHistory.push('/profile')}>
         {this.props.currentUser.data.email}
        </Menu.Item>
 
        <Menu.Item name='logout' onClick={this.props.logout}>
-         logout
+         Logout
        </Menu.Item>
      </Menu.Menu>
     )
@@ -42,8 +42,11 @@ class NavBar extends Component {
     const isLoggedIn = this.props.currentUser.hasOwnProperty('data');
     return (
       <Menu>
-        <Menu.Item name='addRecipe' onClick={() => browserHistory.push('/chats')}>
+        <Menu.Item name='myChats' onClick={() => browserHistory.push('/chats')}>
           My chats
+        </Menu.Item>
+        <Menu.Item name='createChat' onClick={() => browserHistory.push('/chats/new')}>
+          Create chat
         </Menu.Item>
 
         {isLoggedIn ? this.loggedIn() : this.loggedOut()}

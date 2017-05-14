@@ -27,7 +27,16 @@ export function searchChat(link) {
   };
 }
 
-export function signup(email, password) {
+function invalidateForm(err, invalidate) {
+  if (invalidate && err.errors.length > 0) {
+    const invalid = {};
+    err.errors.forEach(
+      ({path, message}) => invalid[path] = message );
+    invalidate(invalid);
+  }
+}
+
+export function signup(email, password, invalidate) {
   return async (dispatch) => {
     dispatch({
       type: 'SIGNUP_REQUESTED',
@@ -41,15 +50,16 @@ export function signup(email, password) {
         type: 'SIGNUP_SUCCEEDED',
         data
       });
+      await browserHistory.push('/login');
     } catch(err) {
+      // don't really want to use callback, be this is the way formsy works
+      invalidateForm(err, invalidate);
       console.log(err);
       dispatch({
         type: 'SIGNUP_FAILED',
         err
       });
     }
-
-    await browserHistory.push('/login');
   }
 }
 
@@ -103,21 +113,7 @@ export function logout() {
   };
 }
 
-export function setLink(link) {
-  return {
-    type: 'SET_LINK',
-    link
-  }
-}
-
-export function setTitle(title) {
-  return {
-    type: 'SET_TITLE',
-    title
-  }
-}
-
-export function createNewChat(title, link) {
+export function createNewChat(title, link, invalidate) {
   return async (dispatch) => {
     dispatch({
       type: 'CREATE_CHAT_REQUESTED',
@@ -131,15 +127,15 @@ export function createNewChat(title, link) {
         type: 'CREATE_CHAT_SUCCEEDED',
         data
       });
+      await browserHistory.push('/chats');
     } catch(err) {
+      invalidateForm(err, invalidate);
       console.log(err);
       dispatch({
         type: 'CREATE_CHAT_FAILED',
         err
       });
     }
-
-    await browserHistory.push('/chats');
   };
 }
 

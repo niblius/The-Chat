@@ -6,7 +6,7 @@ module.exports = function(sequelize, DataTypes) {
         isEmail: true,
         uniqueness: async (value) => {
           if(await User.findOne({ where: {email: value} }))
-            throw new Error('should be unique.');
+            throw new Error('Should be unique');
         }
       }
     },
