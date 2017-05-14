@@ -36,16 +36,16 @@ class ChatPage extends Component {
   }
 
   render() {
-    this.currentChat = this.props.chats.get(this.props.router.params.chatLink);
+    this.currentChat = this.props.chats.get(this.props.router.params.chatUrl);
     const admin = (!this.currentChat)
       ? null
       : this.currentChat.users.find((u) => u.chatUser.role === 'admin');
     if (!this.currentChat) {
-      return ( // TODO chatList dublicate
+      return (
         <Grid>
           <ChatList
             chats={this.props.chats}
-            current={this.props.router.params.chatLink}
+            current={this.props.router.params.chatUrl}
             audioPlayer={this.props.audioPlayer}/>
           <Grid.Column stretched width={12}>
             <Segment>Choose the chat.</Segment>
@@ -57,7 +57,7 @@ class ChatPage extends Component {
         <Grid>
           <ChatList
             chats={this.props.chats}
-            current={this.props.router.params.chatLink}
+            current={this.props.router.params.chatUrl}
             audioPlayer={this.props.audioPlayer}/>
           <Grid.Column stretched width={8}>
             <MessageList

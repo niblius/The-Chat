@@ -46,7 +46,7 @@ export function tryRetrieveChatList(userId) {
     console.log(result);
     const chats = new Map();
     result.data.forEach(({ chat }) => {
-      chats.set(chat.link, chat)
+      chats.set(chat.link || chat.id.toString(), chat)
     });
     return chats;
   });

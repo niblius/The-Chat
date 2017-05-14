@@ -23,7 +23,7 @@ const router = (
         <Route path='/signup' component={SignupPage}></Route>
         <Route path='/login' component={LoginPage}></Route>
         <Route path='/chats/new' component={requireAuthentication(ChatNewPage)}></Route>
-        <Route path='/chats(/:chatLink)' component={requireAuthentication(ChatPage)}></Route>
+        <Route path='/chats(/:chatUrl)' component={requireAuthentication(ChatPage)}></Route>
       </Route>
     </Router>
   </Provider>

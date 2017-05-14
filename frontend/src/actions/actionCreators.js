@@ -27,6 +27,7 @@ export function searchChat(link) {
   };
 }
 
+// don't really want to use callback, be this is the way formsy works
 function invalidateForm(err, invalidate) {
   if (invalidate && err.errors.length > 0) {
     const invalid = {};
@@ -52,7 +53,6 @@ export function signup(email, password, invalidate) {
       });
       await browserHistory.push('/login');
     } catch(err) {
-      // don't really want to use callback, be this is the way formsy works
       invalidateForm(err, invalidate);
       console.log(err);
       dispatch({
@@ -121,6 +121,9 @@ export function createNewChat(title, link, invalidate) {
       link
     });
     try {
+      // required by the server
+      if (link.length === 0)
+        link = null;
       const data = await tryCreateChat(title, link);
       console.log(data);
       dispatch({
