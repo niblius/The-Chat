@@ -11,7 +11,9 @@ import {
   trySendAudioMessage,
   tryLoadAudio,
   tryFindUser,
-  tryCreateJoinOffer } from '../services/api';
+  tryCreateJoinOffer,
+  tryLoadOffers,
+  tryRemoveOffers } from '../services/api';
 import { browserHistory } from 'react-router';
 
 export function searchChat(link) {
@@ -384,5 +386,45 @@ export function findUser(email) {
 export function clearSearch() {
   return {
     type: 'CLEAR_SEARCH'
+  };
+}
+
+export function loadJoinOffers() {
+  return async (dispatch) => {
+    dispatch({
+      type: 'JOIN_OFFERS_REQUESTED'
+    });
+    try {
+      const offers = await tryLoadOffers();
+      console.log(offers);
+      dispatch({
+        type: 'JOIN_OFFERS_RETRIEVE_SUCCEEDED',
+        offers
+      });
+    } catch(err) {
+      console.log(err);
+      dispatch({
+        type: 'JOIN_OFFERS_RETRIEVE_FAILED'
+      });
+    }
+  }
+}
+
+export function removeJoinOffers(chatId, userId) {
+  return async (dispatch) => {
+    dispatch({
+      type: 'REMOVE_JOIN_OFFERS_REQUESTED'
+    });
+    try {
+      await tryRemoveOffers(chatId, userId);
+      dispatch({
+        type: 'REMOVE_JOIN_OFFERS_SUCCEEDED'
+      });
+    } catch(err) {
+      console.log(err);
+      dispatch({
+        type: 'REMOVE_JOIN_OFFERS_FAILED'
+      });
+    }
   };
 }

@@ -1,16 +1,28 @@
 import React, { Component } from 'react'
-import { Menu } from 'semantic-ui-react'
+import { Menu, Icon, Popup } from 'semantic-ui-react'
 import { browserHistory } from 'react-router';
 
-class NavBar extends Component {
+import JoinOffersModal from './JoinOffersModal.jsx';
 
+class NavBar extends Component {
   constructor(props) {
     super(props);
-    this.loggedIn = this.loggedIn.bind(this);
-    this.loggedOut = this.loggedOut.bind(this);
+    this.state = {showOffersModal: false};
   }
 
-  loggedIn() {
+  componentDidMount() {
+    this.props.loadJoinOffers();
+  }
+
+  openOffersModal = () => {
+    this.setState({showOffersModal: true});
+  }
+
+  closeOffersModal = () => {
+    this.setState({showOffersModal: false});
+  }
+
+  loggedIn = () => {
     return (
      <Menu.Menu position='right'>
        <Menu.Item name='user' onClick={() => browserHistory.push('/profile')}>
@@ -24,7 +36,7 @@ class NavBar extends Component {
     )
   }
 
-  loggedOut() {
+  loggedOut = () => {
     return (
      <Menu.Menu position='right'>
        <Menu.Item name='signup' onClick={() => browserHistory.push('/signup')}>
@@ -38,10 +50,42 @@ class NavBar extends Component {
     )
   }
 
+  showJoinOffersModalIfAny = () => {
+    if (this.props.joinOffers.length > 0) {
+      return (<JoinOffersModal
+                open={this.state.showOffersModal}
+                onClose={this.closeOffersModal}
+                onOpen={this.openOffersModal}/>);
+    }
+  }
+
+  showJoinOffersPopupIfAny = () => {
+    const offersCount = this.props.joinOffers.length;
+    if (offersCount > 0) {
+      const menuItem = (<Menu.Item
+                          name='joinOffers'
+                          onClick={this.openOffersModal}>
+                          <Icon
+                            name='smile'
+                            color='blue'
+                            size='large'
+                            style={{marginTop:'3px'}}/>
+                          Invites
+                        </Menu.Item>);
+      return (<Popup
+                trigger={menuItem}
+                content={'You were invited to '
+                        + offersCount
+                        + ((offersCount > 1) ? ' chats.' : ' chat.')}/>);
+    }
+  }
+
   render() {
     const isLoggedIn = this.props.currentUser.hasOwnProperty('data');
     return (
       <Menu>
+        {this.showJoinOffersPopupIfAny()}
+        {this.showJoinOffersModalIfAny()}
         <Menu.Item name='myChats' onClick={() => browserHistory.push('/chats')}>
           My chats
         </Menu.Item>

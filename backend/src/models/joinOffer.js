@@ -19,7 +19,10 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         JoinOffer.belongsTo(models.Chat);
-        JoinOffer.belongsTo(models.User);
+        JoinOffer.belongsTo(models.User, {
+          as: 'user',
+          foreignKey: 'userId'
+        });
         JoinOffer.belongsTo(models.User, {
           as: 'issuedBy',
           foreignKey: 'issuedById'

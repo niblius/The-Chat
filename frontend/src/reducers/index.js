@@ -6,6 +6,7 @@ import currentUser from './currentUser';
 import chats from './chats';
 import audioPlayer from './audioPlayer';
 import userSearch from './userSearch';
+import joinOffers from './joinOffers';
 
 const rootReducer = combineReducers({
   currentUser,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
   chats,
   routing: routerReducer,
   audioPlayer,
-  userSearch
+  userSearch,
+  joinOffers
 });
 
 export default rootReducer;

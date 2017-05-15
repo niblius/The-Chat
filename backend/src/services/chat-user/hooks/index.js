@@ -1,5 +1,3 @@
-'use strict';
-
 const globalHooks = require('../../../hooks');
 const auth = require('feathers-authentication').hooks;
 const validFindQuery = require('./validFindQuery');
@@ -11,6 +9,7 @@ const notJoinedAlready = require('./notJoinedAlready');
 const setUserIdIfExternal = require('./setUserIdIfExternal');
 const populateAssociations = require('./populateAssociations');
 const shouldHaveUserId = require('./shouldHaveUserId');
+const removeJoinOffers = require('./removeJoinOffers');
 
 exports.before = {
   all: [
@@ -40,6 +39,9 @@ exports.after = {
   all: [],
   find: [],
   patch: [],
-  create: [populateAssociations()],
+  create: [
+    removeJoinOffers(),
+    populateAssociations()
+  ],
   remove: []
 };

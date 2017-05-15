@@ -3,8 +3,9 @@ module.exports = () => {
     const db = hook.app.db;
     hook.params.sequelize = {
       include: [
-        { model: db.Chat },
-        { model: db.User }
+        { model: db.User, as: 'issuedBy'},
+        { model: db.User, as: 'user'},
+        { model: db.Chat }
       ]
     };
   }

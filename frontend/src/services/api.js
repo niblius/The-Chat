@@ -113,3 +113,15 @@ export function tryCreateJoinOffer(userId, chatId) {
   const joinOffers = app.service('join-offers');
   return joinOffers.create({userId, chatId});
 }
+
+export function tryLoadOffers() {
+  const joinOffers = app.service('join-offers');
+  return joinOffers.find({ query: {} }).then((result) => (result.data));
+}
+
+export function tryRemoveOffers(chatId, userId) {
+  const joinOffers = app.service('join-offers');
+  return joinOffers.remove(null, {
+    query: {chatId, userId}
+  });
+}

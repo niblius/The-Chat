@@ -9,7 +9,8 @@ function mapStateToProps(state) {
     searchedChat: state.searchedChat,
     currentUser: state.currentUser,
     chats: state.chats,
-    audioPlayer: state.audioPlayer
+    audioPlayer: state.audioPlayer,
+    joinOffers: state.joinOffers
   }
 }
 
