@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Grid, Segment } from 'semantic-ui-react';
 import {
   subscribeToOnCreateMessage,
+  subscribeToOnCreateOffer,
+  subscribeToOnRemoveOffer,
   removeAllOnCreateMessageListeners } from '../services/api';
 import { onMessageCreated } from '../actions/serviceListeners';
 
@@ -22,6 +24,9 @@ class ChatPage extends Component {
   componentDidMount() {
     subscribeToOnCreateMessage(
       onMessageCreated(this.props.dispatch, this.props.audioPlayer.autoplayChatId));
+    this.props.loadJoinOffers();
+    subscribeToOnCreateOffer(this.props.onJoinOfferCreated);
+    subscribeToOnRemoveOffer(this.props.onJoinOfferRemoved);
   }
 
   componentWillReceiveProps(nextProps) {

@@ -41,7 +41,7 @@ exports.after = {
   patch: [],
   create: [
     removeJoinOffers(),
-    populateAssociations()
+    populateAssociations() // TODO doesn't work, should be raw true, but create doesn't accept raw: true
   ],
   remove: []
 };

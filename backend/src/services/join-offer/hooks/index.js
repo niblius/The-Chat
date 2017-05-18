@@ -6,25 +6,27 @@ const populateAssociations = require('./populateAssociations');
 const restrictToAdminOrUser = require('./restrictToAdminOrUser');
 const shouldHaveChatIdAndUserId = require('./shouldHaveChatIdAndUserId');
 const setIssuedBy = require('./setIssuedBy');
+const preventIssuingToSelf = require('./preventIssuingToSelf');
 
 exports.before = {
   all: [
     auth.verifyToken(),
     auth.populateUser(),
-    auth.restrictToAuthenticated(),
-    populateAssociations()
+    auth.restrictToAuthenticated()
   ],
   find: [
-    restrictToAdminOrUser()
+    restrictToAdminOrUser(),
+    populateAssociations()
+  ],
+  get: [
+    populateAssociations()
   ],
   create: [
     // TODO add role
-    // TODO throw if an offer with the same role already exists
-    // TODO prevent sending to yourself
     setIssuedBy(),
+    preventIssuingToSelf(),
     globalHooks.restrictToChatAdmin()
   ],
-  // TODO delete by id, cuz that's stupid!!!
   remove: [
     shouldHaveChatIdAndUserId(),
     restrictToAdminOrUser()
@@ -34,6 +36,11 @@ exports.before = {
 exports.after = {
   all: [],
   find: [],
-  create: [],
+  get: [
+    restrictToAdminOrUser()
+  ],
+  create: [
+    populateAssociations()
+  ],
   remove: []
 };

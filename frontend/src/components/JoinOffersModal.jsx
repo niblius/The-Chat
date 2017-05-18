@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import { Modal, Button, Icon, List } from 'semantic-ui-react'
 import dateFormat from 'dateformat';
 
-import { joinChat, removeJoinOffers } from '../actions/actionCreators';
+import { joinChat, removeJoinOffer } from '../actions/actionCreators';
 
 function mapStateToProps(state) {
   return {
@@ -13,16 +13,40 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({joinChat, removeJoinOffers}, dispatch);
+  return bindActionCreators({joinChat, removeJoinOffer}, dispatch);
+}
+
+function JoinOfferItem({offer, onAccept, onRemove}) {
+  const date = dateFormat(offer.createdAt, 'hh:MM dddd, mmmm dS, yyyy');
+  return (
+  <List.Item>
+    <List.Content floated='right'>
+      <Button onClick={onAccept} color='green'>
+        Accept
+      </Button>
+      <Button onClick={onRemove} color='red'>
+        Decline
+      </Button>
+    </List.Content>
+    {/*<Image avatar src='/assets/images/avatar/small/lena.png' />*/}
+    <List.Content>
+      <List.Header>
+        {offer.chat.title}
+      </List.Header>
+      <List.Description>
+        Issued by {offer.issuedBy.email} at {date}
+      </List.Description>
+    </List.Content>
+  </List.Item>);
 }
 
 class JoinOffersComponent extends Component {
-  accept = (offer) => {
-    return () => this.props.joinChat(offer.chatId);
+  accept = (chatId) => {
+    return () => this.props.joinChat(chatId);
   }
 
-  decline = (offer) => {
-    return () => this.props.removeJoinOffers(offer.chatId, offer.userId);
+  decline = (offerId) => {
+    return () => this.props.removeJoinOffer(offerId);
   }
 
   render() {
@@ -37,24 +61,13 @@ class JoinOffersComponent extends Component {
         <Modal.Header>Invites</Modal.Header>
         <Modal.Content>
           <List divided verticalAlign='middle'>
-            {this.props.offers.map((offer) => (
-              <List.Item key={offer.id}>
-                <List.Content floated='right'>
-                  <Button onClick={this.accept(offer)} color='green'>Accept</Button>
-                  <Button onClick={this.decline(offer)} color='red'>Decline</Button>
-                </List.Content>
-                {/*<Image avatar src='/assets/images/avatar/small/lena.png' />*/}
-                <List.Content>
-                  <List.Header>
-                    {offer.chat.title}
-                  </List.Header>
-                  <List.Description>
-                    Issued by {offer.issuedBy.email} at {dateFormat(
-                                                          offer.createdAt, 'hh:MM dddd, mmmm dS, yyyy')}
-                  </List.Description>
-                </List.Content>
-              </List.Item>
-            ))}
+            {this.props.offers.map((offer) => {
+              return (<JoinOfferItem
+                        key={offer.id}
+                        offer={offer}
+                        onAccept={this.accept(offer.chatId) }
+                        onRemove={this.decline(offer.id)}/>)
+            })}
           </List>
         </Modal.Content>
       </Modal>

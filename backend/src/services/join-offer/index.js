@@ -15,11 +15,23 @@ module.exports = function(){
   const serv = service(options);
   delete serv.patch;
   delete serv.update;
-  delete serv.get;
   app.use('/join-offers', service(options));
 
-  const chatUserService = app.service('/join-offers');
+  const joinOffers = app.service('/join-offers');
 
-  chatUserService.before(hooks.before);
-  chatUserService.after(hooks.after);
+  joinOffers.before(hooks.before);
+  joinOffers.after(hooks.after);
+
+  joinOffers.filter({
+    created: sendOnlyToTargetUser,
+    removed: sendOnlyToTargetUser
+  });
 };
+
+function sendOnlyToTargetUser(data, connection, hook) {
+  if (data.userId !== connection.user.id) {
+    return false;
+  }
+
+  return data;
+}

@@ -119,9 +119,17 @@ export function tryLoadOffers() {
   return joinOffers.find({ query: {} }).then((result) => (result.data));
 }
 
-export function tryRemoveOffers(chatId, userId) {
+export function tryRemoveOffer(id) {
   const joinOffers = app.service('join-offers');
-  return joinOffers.remove(null, {
-    query: {chatId, userId}
-  });
+  return joinOffers.remove(id);
+}
+
+export function subscribeToOnCreateOffer(offerCreated) {
+  const joinOffers = app.service('join-offers');
+  joinOffers.on('created', offerCreated);
+}
+
+export function subscribeToOnRemoveOffer(offersRemoved) {
+  const joinOffers = app.service('join-offers');
+  joinOffers.on('removed', offersRemoved);
 }

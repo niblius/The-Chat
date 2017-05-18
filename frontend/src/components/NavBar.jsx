@@ -10,10 +10,6 @@ class NavBar extends Component {
     this.state = {showOffersModal: false};
   }
 
-  componentDidMount() {
-    this.props.loadJoinOffers();
-  }
-
   openOffersModal = () => {
     this.setState({showOffersModal: true});
   }

@@ -13,7 +13,7 @@ import {
   tryFindUser,
   tryCreateJoinOffer,
   tryLoadOffers,
-  tryRemoveOffers } from '../services/api';
+  tryRemoveOffer } from '../services/api';
 import { browserHistory } from 'react-router';
 
 export function searchChat(link) {
@@ -410,13 +410,13 @@ export function loadJoinOffers() {
   }
 }
 
-export function removeJoinOffers(chatId, userId) {
+export function removeJoinOffer(id) {
   return async (dispatch) => {
     dispatch({
       type: 'REMOVE_JOIN_OFFERS_REQUESTED'
     });
     try {
-      await tryRemoveOffers(chatId, userId);
+      await tryRemoveOffer(id);
       dispatch({
         type: 'REMOVE_JOIN_OFFERS_SUCCEEDED'
       });
@@ -427,4 +427,24 @@ export function removeJoinOffers(chatId, userId) {
       });
     }
   };
+}
+
+export function onJoinOfferCreated(offer) {
+  return (dispatch) => {
+    console.log(offer);
+    dispatch({
+      type: 'JOIN_OFFERS_RETRIEVE_SUCCEEDED',
+      offers: [offer]
+    });
+  }
+}
+
+export function onJoinOfferRemoved(offer) {
+  return (dispatch) => {
+    console.log(offer);
+    dispatch({
+      type: 'JOIN_OFFER_REMOVED',
+      offer
+    });
+  }
 }

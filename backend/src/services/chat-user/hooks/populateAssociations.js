@@ -17,7 +17,7 @@ module.exports = () => {
       };
       return hook;
     } else {
-      return commonHooks.populate({ schema })(hook) // TODO inefficient, use sequelize call
+      return commonHooks.populate({ schema })(hook); // TODO inefficient, use sequelize call
     }
   };
 }

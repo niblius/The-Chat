@@ -17,27 +17,31 @@ function restrictToJoined(role) {
     }
 
     const userId = hook.params.user.id;
-    let chatId = 0, objId = null;
-    if (hook.method.match('get')) {
-      objId = hook.id;
-    } else if (hook.method.match('find')) {
-      chatId = hook.params.query.chatId;
-    } else if (hook.method.match('create')) {
-      chatId = hook.data.chatId
-    } else if (hook.method.match('patch|update|remove')) {
-      if (hook.id !== null && hook.id !== undefined) { // check id
+    let chatId = null, objId = null;
+    if (hook.type === 'before') {
+      if (hook.method.match('get')) {
         objId = hook.id;
-      } else {  // check query
+      } else if (hook.method.match('find')) {
         chatId = hook.params.query.chatId;
+      } else if (hook.method.match('create')) {
+        chatId = hook.data.chatId
+      } else if (hook.method.match('patch|update|remove')) {
+        if (hook.id !== null && hook.id !== undefined) { // check id
+          objId = hook.id;
+        } else {  // check query
+          chatId = hook.params.query.chatId;
+        }
       }
+    } else {
+      chatId = hook.result.chatId;
     }
 
-    if (chatId !== null) {
-      return isJoined(hook, userId, chatId, role);
-    } else if (objId !== null) {
+    if (objId !== null) {
       return hook.service.get(objId).then((res) => {
         return isJoined(hook, userId, res.chatId, role);
       });
+    } else if (chatId !== null) {
+      return isJoined(hook, userId, chatId, role);
     } else {
       return Promise.resolve(null);
     }
@@ -89,8 +93,17 @@ function restrictToChatAdmin() {
   };
 }
 
+function setRawTrue() {
+  return (hook) => {
+    hook.params.sequelize = Object.assign(
+      {}, hook.params.sequelize, {raw: true});
+    return hook;
+  };
+}
+
 module.exports = {
   restrictToJoinedThrows,
   restrictToJoined,
-  restrictToChatAdmin
+  restrictToChatAdmin,
+  setRawTrue
 };
