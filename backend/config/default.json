@@ -12,7 +12,7 @@
   "db-settings": {
     "username": "nodejsapps",
     "password": "12345678",
-    "database": "achatDB",
+    "database": "achatDB-chat",
     "host": "127.0.0.1",
     "port": "5432",
     "dialect": "postgres"

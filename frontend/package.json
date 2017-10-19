@@ -21,6 +21,7 @@
     "recorder-js": "^1.0.6",
     "redux": "^3.6.0",
     "redux-saga": "^0.14.3",
+    "redux-thunk": "^2.2.0",
     "semantic-ui-react": "^0.68.0",
     "wavesurfer.js": "^1.4.0"
   },
